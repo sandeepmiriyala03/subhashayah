@@ -689,8 +689,8 @@
             generatePreview();
         }
 
-        function createManifest() {
-            const MANIFEST = {
+      function createManifest() {
+  const MANIFEST = {
     name: "Subhāśayaḥ - 2026",
     short_name: "Subhāśayaḥ",
     start_url: ".",
@@ -698,26 +698,28 @@
     background_color: "#E91E63",
     theme_color: "#E91E63",
     icons: [
-        {
-            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
-            sizes: "192x192",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-        },
-        {
-            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
-            sizes: "512x512",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-        }
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
+        sizes: "192x192",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+      },
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
+        sizes: "512x512",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+      }
     ]
-};
-            
+  };
 
-            const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            document.getElementById('manifestLink').href = url;
-        }
+  const blob = new Blob(
+    [JSON.stringify(MANIFEST)],
+    { type: 'application/json' }
+  );
+  const url = URL.createObjectURL(blob);
+  document.getElementById('manifestLink').href = url;
+}
 
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
