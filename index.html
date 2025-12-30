@@ -712,12 +712,12 @@
         }
     ]
 };
-            };
+            
 
             const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             document.getElementById('manifestLink').href = url;
-        
+        }
 
         function registerServiceWorker() {
             if ('serviceWorker' in navigator) {
