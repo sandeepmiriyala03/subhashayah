@@ -1,6 +1,8 @@
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: "Noto Sans Telugu", system-ui, sans-serif;
   background: #FFF8E1;
   color: #212121;
 }
@@ -10,32 +12,79 @@ body {
   padding: 16px;
 }
 
+#installBtn {
+  margin-top: 8px;
+  padding: 10px;
+  border: none;
+  background: #0D47A1;
+  color: #fff;
+  border-radius: 6px;
+}
+
 main {
   padding: 16px;
 }
 
-textarea,
-input {
-  width: 100%;
-  margin-top: 12px;
+.upload {
+  display: block;
   padding: 12px;
+  background: #E3F2FD;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
   font-size: 18px;
 }
 
-button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 14px;
-  font-size: 16px;
-}
-
-.primary {
-  background: #1B5E20;
-  color: #fff;
-  border: none;
+textarea {
+  min-height: 120px;
+  line-height: 1.5;
 }
 
 .count {
   display: flex;
   gap: 8px;
+  margin-top: 12px;
+}
+
+.count button {
+  flex: 1;
+  padding: 10px;
+}
+
+.primary {
+  margin-top: 16px;
+  padding: 14px;
+  width: 100%;
+  background: #1B5E20;
+  color: white;
+  border: none;
+  font-size: 18px;
+}
+
+#preview {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+canvas {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.download {
+  background: #0D47A1;
+  color: #fff;
+  padding: 8px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
 }

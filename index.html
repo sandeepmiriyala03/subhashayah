@@ -5,20 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Subhāśayaḥ</title>
 
-  <link rel="manifest" href="pwa/manifest.json" />
+  <!-- ✅ Google Fonts (FIXED) -->
+  <link href="https://fonts.googleapis.com/css2?family=Chathura:wght@100;300;400;700;800&family=Gidugu&family=Mandali&family=NTR&family=Noto+Sans+Telugu:wght@100;300;400;700&family=Ramabhadra&family=Ramaraja&family=Ravi+Prakash&family=Sirivennela&family=Tenali+Ramakrishna&family=Timmana&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
 
 <header class="header">
   <h1>Subhāśayaḥ</h1>
   <p>One-Click Good Wishes</p>
+  <button id="installBtn" hidden>📲 Install App</button>
 </header>
 
 <main>
-  <button id="uploadBtn">📷 Upload Image (Optional)</button>
+  <label class="upload">
+    📷 Upload Image (Optional)
+    <input type="file" id="imageInput" accept="image/*" hidden />
+  </label>
 
-  <textarea id="messageBox" placeholder="Enter your message"></textarea>
+  <label>Select Font</label>
+  <select id="titleFontFamily">
+    <option value="Noto Sans Telugu" selected>Noto Sans Telugu</option>
+    <option value="Chathura">Chathura</option>
+    <option value="Gidugu">Gidugu</option>
+    <option value="Mandali">Mandali</option>
+    <option value="NTR">NTR</option>
+    <option value="Ramabhadra">Ramabhadra</option>
+    <option value="Ramaraja">Ramaraja</option>
+    <option value="Ravi Prakash">Ravi Prakash</option>
+    <option value="Sirivennela">Sirivennela</option>
+    <option value="Tenali Ramakrishna">Tenali Ramakrishna</option>
+    <option value="Timmana">Timmana</option>
+  </select>
+
+  <textarea id="messageBox">
+నూతన సంవత్సర శుభాకాంక్షలు
+ఈ ఏడాది మీ ఇంట్లో
+ఆనందం నిండాలని కోరుకుంటున్నాం
+  </textarea>
 
   <input id="signatureBox" placeholder="Signature (optional)" />
 
@@ -28,7 +54,7 @@
     <button data-count="5">5</button>
   </div>
 
-  <button id="generateBtn" class="primary">Generate Greeting</button>
+  <button id="generateBtn" class="primary">Generate Greeting Cards</button>
 
   <section id="preview"></section>
 </main>
