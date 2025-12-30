@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #FFF8E1;
+  color: #212121;
+}
+
+.header {
+  text-align: center;
+  padding: 16px;
+}
+
+main {
+  padding: 16px;
+}
+
+textarea,
+input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  font-size: 18px;
+}
+
+button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.primary {
+  background: #1B5E20;
+  color: #fff;
+  border: none;
+}
+
+.count {
+  display: flex;
+  gap: 8px;
+}

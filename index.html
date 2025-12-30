@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subhāśayaḥ</title>
+
+  <link rel="manifest" href="pwa/manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="header">
+  <h1>Subhāśayaḥ</h1>
+  <p>One-Click Good Wishes</p>
+</header>
+
+<main>
+  <button id="uploadBtn">📷 Upload Image (Optional)</button>
+
+  <textarea id="messageBox" placeholder="Enter your message"></textarea>
+
+  <input id="signatureBox" placeholder="Signature (optional)" />
+
+  <div class="count">
+    <button data-count="1">1</button>
+    <button data-count="3">3</button>
+    <button data-count="5">5</button>
+  </div>
+
+  <button id="generateBtn" class="primary">Generate Greeting</button>
+
+  <section id="preview"></section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
