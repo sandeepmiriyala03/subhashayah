@@ -1,115 +1,362 @@
-let deferredPrompt;
+// app.js
+
+const YEAR = 2026;
+const canvasPreview = document.getElementById("previewCanvas");
+const ctxPreview = canvasPreview.getContext("2d");
+const langSelect = document.getElementById("languageSelect");
+const msgInput = document.getElementById("messageInput");
+const fontSelect = document.getElementById("fontSelect");
+const fontSizeRange = document.getElementById("fontSize");
+const fontSizeValue = document.getElementById("fontSizeValue");
+const themeButtons = document.querySelectorAll(".theme-swatch");
+const photoInput = document.getElementById("photoInput");
+const countSelect = document.getElementById("countSelect");
+const renderBtn = document.getElementById("renderBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const yearTitle = document.getElementById("yearTitle");
 const installBtn = document.getElementById("installBtn");
 
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.hidden = false;
-});
+let currentTheme = "light";
+let uploadedImage = null; // Image or offscreen canvas
+let deferredPrompt = null;
 
-installBtn.onclick = async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.hidden = true;
+// Language -> default message and font options
+const LANG_CONFIG = {
+  te: {
+    message: `నూతన సంవత్సర శుభాకాంక్షలు ${YEAR}`,
+    fonts: [
+      { label: "Noto Sans Telugu", css: `"Noto Sans Telugu", system-ui, sans-serif` }
+    ]
+  },
+  en: {
+    message: `Happy New Year ${YEAR}`,
+    fonts: [
+      { label: "Noto Sans", css: `"Noto Sans", system-ui, sans-serif` }
+    ]
+  },
+  sa: {
+    message: `नववर्षशुभाशयाः ${YEAR}`,
+    fonts: [
+      { label: "Noto Serif Devanagari", css: `"Noto Serif Devanagari", "Noto Sans", serif` }
+    ]
+  }
 };
 
-// Register SW (safe)
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").catch(() => {});
+function init() {
+  yearTitle.textContent = `Happy New Year ${YEAR}`;
+  setupLanguage();
+  setupFontSize();
+  setupThemes();
+  hookEvents();
+  renderPreview(); // initial empty render
+  registerServiceWorker();
+  setupInstallPrompt();
 }
 
-// App logic
-const imageInput = document.getElementById("imageInput");
-const messageBox = document.getElementById("messageBox");
-const signatureBox = document.getElementById("signatureBox");
-const fontSelect = document.getElementById("titleFontFamily");
-const preview = document.getElementById("preview");
-const generateBtn = document.getElementById("generateBtn");
+function setupLanguage() {
+  const lang = langSelect.value;
+  const cfg = LANG_CONFIG[lang];
+  msgInput.value = cfg.message;
 
-let selectedCount = 1;
-let loadedImage = null;
+  fontSelect.innerHTML = "";
+  cfg.fonts.forEach(f => {
+    const opt = document.createElement("option");
+    opt.textContent = f.label;
+    opt.value = f.css;
+    fontSelect.appendChild(opt);
+  });
 
-document.querySelectorAll(".count button").forEach(btn => {
-  btn.onclick = () => selectedCount = Number(btn.dataset.count);
-});
+  document.documentElement.lang = lang === "en" ? "en" : "te";
+}
 
-imageInput.onchange = e => {
-  const file = e.target.files[0];
+function setupFontSize() {
+  fontSizeValue.textContent = `${fontSizeRange.value}px`;
+}
+
+function setupThemes() {
+  themeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      themeButtons.forEach(b => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      currentTheme = btn.dataset.theme;
+      renderPreview();
+    });
+  });
+}
+
+function hookEvents() {
+  langSelect.addEventListener("change", () => {
+    setupLanguage();
+    renderPreview();
+  });
+
+  msgInput.addEventListener("input", () => renderPreview());
+
+  fontSelect.addEventListener("change", () => renderPreview());
+
+  fontSizeRange.addEventListener("input", () => {
+    fontSizeValue.textContent = `${fontSizeRange.value}px`;
+    renderPreview();
+  });
+
+  photoInput.addEventListener("change", onPhotoSelected);
+  renderBtn.addEventListener("click", renderPreview);
+  downloadBtn.addEventListener("click", downloadCards);
+}
+
+function themeColors(theme) {
+  if (theme === "blue") {
+    return { bg: "#0b3c5d", fg: "#f6f4ef" };
+  }
+  if (theme === "dark") {
+    return { bg: "#101820", fg: "#f6f4ef" };
+  }
+  return { bg: "#f6f4ef", fg: "#0b3c5d" };
+}
+
+// --- Image handling: EXIF + center square crop ---
+
+function onPhotoSelected(event) {
+  const file = event.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = e => {
+    const arrayBuffer = e.target.result;
+    const orientation = readExifOrientation(arrayBuffer);
+    const blob = new Blob([arrayBuffer]);
+    const url = URL.createObjectURL(blob);
     const img = new Image();
-    img.onload = () => loadedImage = img;
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-generateBtn.onclick = async () => {
-  await document.fonts.ready;
-  preview.innerHTML = "";
-
-  for (let i = 0; i < selectedCount; i++) {
-    const canvas = createCard();
-    preview.appendChild(canvas);
-
-    const d = document.createElement("div");
-    d.className = "download";
-    d.innerText = "Download";
-    d.onclick = () => {
-      const a = document.createElement("a");
-      a.href = canvas.toDataURL("image/png");
-      a.download = `subhashayah_${i + 1}.png`;
-      a.click();
+    img.onload = () => {
+      const normalized = drawImageWithOrientation(img, orientation);
+      uploadedImage = cropToSquare(normalized);
+      URL.revokeObjectURL(url);
+      renderPreview();
     };
-    preview.appendChild(d);
+    img.src = url;
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// Minimal EXIF orientation parser (JPEG only, orientation 1–8) – can be refined later
+function readExifOrientation(buffer) {
+  const view = new DataView(buffer);
+  if (view.getUint16(0, false) !== 0xffd8) return 1; // not JPEG
+  let offset = 2;
+  const length = view.byteLength;
+
+  while (offset < length) {
+    const marker = view.getUint16(offset, false);
+    offset += 2;
+    if (marker === 0xffe1) {
+      const exifLength = view.getUint16(offset, false);
+      offset += 2;
+      if (view.getUint32(offset, false) !== 0x45786966) return 1; // "Exif"
+      offset += 6;
+      const little = view.getUint16(offset, false) === 0x4949;
+      offset += view.getUint32(offset + 4, little);
+      const tags = view.getUint16(offset, little);
+      offset += 2;
+      for (let i = 0; i < tags; i++) {
+        const tagOffset = offset + i * 12;
+        const tag = view.getUint16(tagOffset, little);
+        if (tag === 0x0112) {
+          const valOffset = tagOffset + 8;
+          return view.getUint16(valOffset, little);
+        }
+      }
+    } else if ((marker & 0xff00) !== 0xff00) {
+      break;
+    } else {
+      offset += view.getUint16(offset, false);
+    }
   }
-};
+  return 1;
+}
 
-function createCard() {
-  const c = document.createElement("canvas");
-  c.width = 1080;
-  c.height = 1080;
-  const ctx = c.getContext("2d");
+function drawImageWithOrientation(img, orientation) {
+  const off = document.createElement("canvas");
+  const ctx = off.getContext("2d");
+  let w = img.naturalWidth;
+  let h = img.naturalHeight;
 
-  ctx.fillStyle = "#FFF8E1";
-  ctx.fillRect(0, 0, 1080, 1080);
+  if (orientation > 4 && orientation < 9) {
+    off.width = h;
+    off.height = w;
+  } else {
+    off.width = w;
+    off.height = h;
+  }
 
-  ctx.font = "bold 64px system-ui";
+  switch (orientation) {
+    case 2: // horizontal flip
+      ctx.transform(-1, 0, 0, 1, off.width, 0);
+      break;
+    case 3: // 180°
+      ctx.transform(-1, 0, 0, -1, off.width, off.height);
+      break;
+    case 4: // vertical flip
+      ctx.transform(1, 0, 0, -1, 0, off.height);
+      break;
+    case 5: // vertical flip + 90° right
+      ctx.transform(0, 1, 1, 0, 0, 0);
+      break;
+    case 6: // 90° right
+      ctx.transform(0, 1, -1, 0, off.height, 0);
+      break;
+    case 7: // horizontal flip + 90° right
+      ctx.transform(0, -1, -1, 0, off.height, off.width);
+      break;
+    case 8: // 90° left
+      ctx.transform(0, -1, 1, 0, 0, off.width);
+      break;
+    default:
+      // no transform
+      break;
+  }
+
+  ctx.drawImage(img, 0, 0);
+  return off;
+}
+
+function cropToSquare(sourceCanvas) {
+  const off = document.createElement("canvas");
+  const ctx = off.getContext("2d");
+  const w = sourceCanvas.width;
+  const h = sourceCanvas.height;
+  const size = Math.min(w, h);
+  const sx = (w - size) / 2;
+  const sy = (h - size) / 2;
+  off.width = size;
+  off.height = size;
+  ctx.drawImage(sourceCanvas, sx, sy, size, size, 0, 0, size, size);
+  return off;
+}
+
+// --- Rendering: preview + full-size cards ---
+
+function renderPreview() {
+  renderCardToCanvas(canvasPreview, 540, 540);
+}
+
+function renderCardToCanvas(canvas, width, height) {
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  const { bg, fg } = themeColors(currentTheme);
+
+  // Background
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+
+  // Optional photo as background layer
+  if (uploadedImage) {
+    const img = uploadedImage;
+    // cover: center-crop for final 1:1 (already square)
+    ctx.save();
+    const size = Math.min(width, height);
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, size, size);
+    ctx.restore();
+
+    // subtle overlay to keep text readable
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  // Year at top
+  ctx.fillStyle = fg;
   ctx.textAlign = "center";
-  ctx.fillStyle = "#212121";
-  ctx.fillText("Happy New Year", 540, 100);
+  ctx.textBaseline = "top";
+  ctx.font = `bold ${Math.round(width * 0.06)}px "Noto Sans"`;
+  ctx.fillText(`Happy New Year ${YEAR}`, width / 2, width * 0.05);
 
-  if (loadedImage) drawCropped(ctx, loadedImage, 80, 180, 420, 720);
+  // Greeting message
+  const message = msgInput.value.trim();
+  const fontSize = parseInt(fontSizeRange.value, 10);
+  const fontFamily = fontSelect.value || `"Noto Sans"`;
+  ctx.font = `bold ${fontSize}px ${fontFamily}`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
-  const font = fontSelect.value;
-  ctx.textAlign = "left";
-  ctx.font = `48px "${font}", system-ui`;
+  const margin = width * 0.12;
+  const textWidth = width - margin * 2;
+  const lines = wrapText(ctx, message, textWidth);
+  const lineHeight = fontSize * 1.2;
+  const totalHeight = lines.length * lineHeight;
+  let y = height / 2 - totalHeight / 2;
 
-  let y = 300;
-  messageBox.value.trim().split("\n").forEach(line => {
-    ctx.fillText(line, 540, y);
-    y += 64;
+  lines.forEach(line => {
+    ctx.fillStyle = fg;
+    ctx.fillText(line, width / 2, y);
+    y += lineHeight;
+  });
+}
+
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(/\s+/);
+  const lines = [];
+  let current = "";
+
+  words.forEach(word => {
+    const test = current ? current + " " + word : word;
+    const width = ctx.measureText(test).width;
+    if (width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
   });
 
-  if (signatureBox.value.trim()) {
-    ctx.font = `36px "${font}", system-ui`;
-    ctx.fillText("– " + signatureBox.value, 540, 900);
+  if (current) lines.push(current);
+  return lines;
+}
+
+function downloadCards() {
+  const count = parseInt(countSelect.value, 10) || 1;
+
+  for (let i = 1; i <= count; i++) {
+    const tmp = document.createElement("canvas");
+    renderCardToCanvas(tmp, 1080, 1080);
+    tmp.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `subhasayah-${YEAR}-${i}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, "image/png");
   }
-
-  return c;
 }
 
-function drawCropped(ctx, img, x, y, w, h) {
-  const s = Math.min(img.width, img.height);
-  ctx.drawImage(
-    img,
-    (img.width - s) / 2,
-    (img.height - s) / 2,
-    s, s,
-    x, y, w, h
-  );
+// --- PWA: SW registration & install button ---
+
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch(() => {});
+  }
 }
+
+function setupInstallPrompt() {
+  window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.hidden = false;
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    if (result.outcome === "accepted") {
+      installBtn.hidden = true;
+    }
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener("DOMContentLoaded", init);

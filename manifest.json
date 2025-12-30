@@ -1,15 +1,11 @@
 {
-  "name": "Subhāśayaḥ",
+  "name": "Subhāśayaḥ Greetings",
   "short_name": "Subhāśayaḥ",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#FFF8E1",
-  "theme_color": "#1B5E20",
+  "background_color": "#f4f7f6",
+  "theme_color": "#1a4731",
   "icons": [
-    {
-      "src": "icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "https://cdn-icons-png.flaticon.com/512/3566/3566511.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

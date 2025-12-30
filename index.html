@@ -1,64 +1,1063 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Subhāśayaḥ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Create beautiful New Year greeting cards in Telugu, English, and Sanskrit - Works offline!">
+    <meta name="theme-color" content="#E91E63">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Subhāśayaḥ - నూతన సంవత్సర శుభాకాంక్షలు 2026</title>
+    <link rel="manifest" id="manifestLink">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Playfair+Display:wght@700&family=Merriweather:wght@700&family=Lora:wght@700&family=Roboto:wght@700&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  <!-- ✅ Google Fonts (FIXED) -->
-  <link href="https://fonts.googleapis.com/css2?family=Chathura:wght@100;300;400;700;800&family=Gidugu&family=Mandali&family=NTR&family=Noto+Sans+Telugu:wght@100;300;400;700&family=Ramabhadra&family=Ramaraja&family=Ravi+Prakash&family=Sirivennela&family=Tenali+Ramakrishna&family=Timmana&display=swap" rel="stylesheet">
+        :root {
+            --primary: #E91E63;
+            --primary-dark: #C2185B;
+            --secondary: #FF6F00;
+            --bg: #FFF8E1;
+            --card-bg: #FFFFFF;
+            --text: #212121;
+            --text-light: #757575;
+            --border: #FFE082;
+            --success: #4CAF50;
+            --shadow: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-sm: 0 2px 6px rgba(0,0,0,0.1);
+        }
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="manifest" href="manifest.json" />
+        body {
+            font-family: 'Noto Sans Telugu', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .year {
+            font-size: 18px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        .install-prompt {
+            background: var(--success);
+            color: white;
+            padding: 14px 16px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+            font-size: 14px;
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        .install-prompt button {
+            background: white;
+            color: var(--success);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border);
+        }
+
+        label {
+            display: block;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        select, textarea {
+            width: 100%;
+            font-size: 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: #FFFEF7;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        select {
+            padding: 13px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23E91E63' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 18px;
+            padding-right: 38px;
+        }
+
+        textarea {
+            padding: 13px;
+            min-height: 110px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .font-preview {
+            margin-top: 10px;
+            padding: 14px;
+            background: linear-gradient(135deg, #FFF9C4, #FFE082);
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            font-size: 17px;
+            text-align: center;
+            border: 2px solid var(--border);
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .file-btn:active {
+            transform: scale(0.98);
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-info {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .image-preview-wrapper {
+            margin-top: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .image-preview-wrapper img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .theme-option {
+            aspect-ratio: 1;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-option:active {
+            transform: scale(0.95);
+        }
+
+        .theme-option.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.3);
+            transform: scale(1.05);
+        }
+
+        .theme-option::after {
+            content: '✓';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            color: white;
+            background: var(--primary);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-option.selected::after {
+            display: flex;
+        }
+
+        .slider-container {
+            padding: 6px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            background: #E0E0E0;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .range-value {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 6px;
+        }
+
+        .text-align-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .align-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .align-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button.action-btn {
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+            font-family: inherit;
+        }
+
+        button.action-btn:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #607D8B, #90A4AE);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            display: block;
+            margin: 14px auto;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            margin: 16px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #FFE082;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 14px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status {
+            text-align: center;
+            padding: 14px;
+            border-radius: 10px;
+            margin: 14px 0;
+            font-weight: 600;
+            display: none;
+            box-shadow: var(--shadow-sm);
+            font-size: 15px;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #C8E6C9;
+            color: #1B5E20;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 70px;
+            right: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 52px;
+            height: 52px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+            transition: transform 0.2s;
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
+        .back-to-top:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 19px;
+            }
+
+            .year {
+                font-size: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            label {
+                font-size: 16px;
+            }
+
+            .theme-grid {
+                gap: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>🎊 Subhāśayaḥ 🎊</h1>
+        <div class="year">నూతన సంవత్సర శుభాకాంక్షలు 2026</div>
+    </header>
 
-<header class="header">
-  <h1>Subhāśayaḥ</h1>
-  <p>One-Click Good Wishes</p>
-  <button id="installBtn" hidden>📲 Install App</button>
-</header>
+    <div class="install-prompt" id="installPrompt">
+        <div style="flex: 1;">📱 ఆఫ్‌లైన్ కోసం యాప్ ఇన్‌స్టాల్ చేయండి!</div>
+        <button id="installBtn">Install</button>
+    </div>
 
-<main>
-  <label class="upload">
-    📷 Upload Image (Optional)
-    <input type="file" id="imageInput" accept="image/*" hidden />
-  </label>
+    <div class="container">
+        <div class="card">
+            <label for="language">భాష / Language / भाषा</label>
+            <select id="language" aria-label="Select Language">
+                <option value="te">తెలుగు (Telugu)</option>
+                <option value="en">English</option>
+                <option value="sa">संस्कृतम् (Sanskrit)</option>
+            </select>
+        </div>
 
-  <label>Select Font</label>
-  <select id="titleFontFamily">
-    <option value="Noto Sans Telugu" selected>Noto Sans Telugu</option>
-    <option value="Chathura">Chathura</option>
-    <option value="Gidugu">Gidugu</option>
-    <option value="Mandali">Mandali</option>
-    <option value="NTR">NTR</option>
-    <option value="Ramabhadra">Ramabhadra</option>
-    <option value="Ramaraja">Ramaraja</option>
-    <option value="Ravi Prakash">Ravi Prakash</option>
-    <option value="Sirivennela">Sirivennela</option>
-    <option value="Tenali Ramakrishna">Tenali Ramakrishna</option>
-    <option value="Timmana">Timmana</option>
-  </select>
+        <div class="card">
+            <label for="message">మీ సందేశం / Your Message</label>
+            <textarea id="message" rows="5" aria-label="Message text"></textarea>
+            <div class="help-text">సందేశం మార్చండి లేదా డిఫాల్ట్ ఉంచండి</div>
+        </div>
 
-  <textarea id="messageBox">
-నూతన సంవత్సర శుభాకాంక్షలు
-ఈ ఏడాది మీ ఇంట్లో
-ఆనందం నిండాలని కోరుకుంటున్నాం
-  </textarea>
+        <div class="card">
+            <label>వచన అమరిక / Text Alignment</label>
+            <div class="text-align-btns">
+                <button class="align-btn" data-align="left" aria-label="Align left">◧</button>
+                <button class="align-btn active" data-align="center" aria-label="Align center">▣</button>
+                <button class="align-btn" data-align="right" aria-label="Align right">◨</button>
+            </div>
+        </div>
 
-  <input id="signatureBox" placeholder="Signature (optional)" />
+        <div class="card">
+            <label for="imageUpload">చిత్రం / Upload Image (Optional)</label>
+            <div class="file-upload">
+                <button class="file-btn" type="button">📷 చిత్రం ఎంచుకోండి</button>
+                <input type="file" id="imageUpload" accept="image/*" aria-label="Upload image">
+            </div>
+            <div class="file-info" id="fileInfo">చిత్రం లేదు</div>
+            <div class="image-preview-wrapper" id="imagePreviewWrapper" style="display: none;">
+                <img id="imagePreview" src="" alt="Image preview">
+                <button class="remove-image" id="removeImage" type="button" aria-label="Remove image">×</button>
+            </div>
+            <div class="help-text">ఆటో-రొటేట్ & క్రాప్. చదరపు చిత్రాలు బాగా పని చేస్తాయి</div>
+        </div>
 
-  <div class="count">
-    <button data-count="1">1</button>
-    <button data-count="3">3</button>
-    <button data-count="5">5</button>
-  </div>
+        <div class="card">
+            <label>నేపథ్యం / Background Theme</label>
+            <div class="theme-grid" id="themeGrid"></div>
+        </div>
 
-  <button id="generateBtn" class="primary">Generate Greeting Cards</button>
+        <div class="card">
+            <label for="fontSelect">ఫాంట్ శైలి / Font Style</label>
+            <select id="fontSelect" aria-label="Font family"></select>
+            <div class="font-preview" id="fontPreview">ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..</div>
+        </div>
 
-  <section id="preview"></section>
-</main>
+        <div class="card">
+            <label for="fontSize">ఫాంట్ పరిమాణం / Font Size</label>
+            <div class="slider-container">
+                <input type="range" id="fontSize" min="10" max="100" value="40" aria-label="Font size">
+                <div class="range-value" id="fontSizeValue">40px</div>
+            </div>
+        </div>
 
-<script src="app.js"></script>
+        <div class="card">
+            <label for="cardCount">కార్డుల సంఖ్య / Card Count</label>
+            <select id="cardCount" aria-label="Number of cards">
+                <option value="1">1 కార్డ్</option>
+                <option value="2">2 కార్డులు</option>
+                <option value="3">3 కార్డులు</option>
+                <option value="4">4 కార్డులు</option>
+                <option value="5">5 కార్డులు</option>
+            </select>
+        </div>
+
+        <div class="card btn-group">
+            <button class="action-btn btn-primary" id="generateBtn">🎨 Preview</button>
+            <button class="action-btn btn-success" id="downloadBtn" disabled>⬇️ Download</button>
+            <button class="action-btn btn-reset" id="resetBtn">🔄 Reset All</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="font-size: 17px; font-weight: 600;">కార్డులు సృష్టిస్తోంది...</p>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="card">
+            <label>ప్రివ్యూ / Preview</label>
+            <canvas id="preview" width="1080" height="1080"></canvas>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+    <script>
+        const YEAR = 2026;
+        const CANVAS_SIZE = 1080;
+        const MAX_IMAGE_SIZE = 2048;
+        
+        const DEFAULT_MESSAGES = {
+            te: `నూతన సంవత్సర శుభాకాంక్షలు ${YEAR}!\n\nమీకు మరియు మీ కుటుంబానికి\nసంతోషం, ఆరోగ్యం మరియు\nసమృద్ధి కలుగాలని కోరుకుంటున్నాను.`,
+            en: `Happy New Year ${YEAR}!\n\nWishing you and your family\njoy, health, and prosperity\nin the year ahead.`,
+            sa: `नूतनवर्षस्य शुभाशयाः ${YEAR}!\n\nभवते भवतः परिवाराय च\nआनन्दः आरोग्यं समृद्धिः च भवन्तु।`
+        };
+
+        const THEMES = [
+            { name: 'సూర్యోదయం', gradient: ['#FF6B6B', '#FFE66D'] },
+            { name: 'సముద్రం', gradient: ['#4FACFE', '#00F2FE'] },
+            { name: 'అడవి', gradient: ['#56AB2F', '#A8E063'] },
+            { name: 'సూర్యాస్తమయం', gradient: ['#FA709A', '#FEE140'] },
+            { name: 'రాజ', gradient: ['#667EEA', '#764BA2'] },
+            { name: 'అగ్ని', gradient: ['#F2994A', '#F2C94C'] },
+            { name: 'లావెండర్', gradient: ['#A8EDEA', '#FED6E3'] },
+            { name: 'రాత్రి', gradient: ['#2C3E50', '#3498DB'] },
+            { name: 'వసంతం', gradient: ['#FA8BFF', '#2BD2FF'] }
+        ];
+
+        const FONTS = {
+            te: [
+                { name: 'Noto Sans Telugu', family: 'Noto Sans Telugu', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Ramabhadra', family: 'Ramabhadra', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Gidugu', family: 'Gidugu', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Mandali', family: 'Mandali', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'NTR', family: 'NTR', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'RaviPrakash', family: 'RaviPrakash', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'TenaliRamakrishna', family: 'Tenali Ramakrishna', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Timmana', family: 'Timmana', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' }
+            ],
+            en: [
+                { name: 'Playfair Display', family: 'Playfair Display', preview: 'Happy New Year 2026!' },
+                { name: 'Merriweather', family: 'Merriweather', preview: 'Happy New Year 2026!' },
+                { name: 'Lora', family: 'Lora', preview: 'Happy New Year 2026!' },
+                { name: 'Roboto', family: 'Roboto', preview: 'Happy New Year 2026!' }
+            ],
+            sa: [
+                { name: 'Noto Sans Devanagari', family: 'Noto Sans Devanagari', preview: 'नूतनवर्षस्य शुभाशयाः' },
+                { name: 'Tiro Devanagari Sanskrit', family: 'Tiro Devanagari Sanskrit', preview: 'नूतनवर्षस्य शुभाशयाः' },
+                { name: 'Hind', family: 'Hind', preview: 'नूतनवर्षस्य शुभाशयाः' },
+                { name: 'Poppins', family: 'Poppins', preview: 'नूतनवर्षस्य शुभाशयाः' }
+            ]
+        };
+
+        let state = {
+            language: 'te',
+            message: DEFAULT_MESSAGES.te,
+            image: null,
+            imageFile: null,
+            theme: 0,
+            font: FONTS.te[0].family,
+            fontSize: 40,
+            textAlign: 'center',
+            cardCount: 1,
+            previewGenerated: false
+        };
+
+        let deferredPrompt = null;
+
+        function init() {
+            createManifest();
+            registerServiceWorker();
+            renderThemes();
+            updateFontSelect();
+            setupEventListeners();
+            setupPWA();
+            updateFontPreview();
+            generatePreview();
+        }
+
+        function createManifest() {
+            const manifest = {
+                name: "Subhāśayaḥ - నూతన సంవత్సర శుభాకాంక్షలు 2026",
+                short_name: "Subhāśayaḥ",
+                description: "Create beautiful New Year greeting cards in Telugu, English, and Sanskrit - Works offline!",
+                start_url: "./",
+                display: "standalone",
+                background_color: "#FFF8E1",
+                theme_color: "#E91E63",
+                orientation: "portrait",
+                icons: [{
+                    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23E91E63'/%3E%3Ctext x='256' y='320' font-size='200' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
+                    sizes: "512x512",
+                    type: "image/svg+xml",
+                    purpose: "any maskable"
+                }]
+            };
+
+            const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            document.getElementById('manifestLink').href = url;
+        }
+
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                const sw = `
+const CACHE = 'subhasayah-v1';
+const urls = ['./'];
+self.addEventListener('install', e => {
+    e.waitUntil(caches.open(CACHE).then(c => c.addAll(urls)));
+    self.skipWaiting();
+});
+self.addEventListener('fetch', e => {
+    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(f => {
+        return caches.open(CACHE).then(c => {
+            c.put(e.request, f.clone());
+            return f;
+        });
+    }).catch(() => caches.match('./'))));
+});
+self.addEventListener('activate', e => {
+    e.waitUntil(caches.keys().then(ks => Promise.all(ks.map(k => k !== CACHE && caches.delete(k)))));
+    self.clients.claim();
+});`;
+                const blob = new Blob([sw], { type: 'application/javascript' });
+                const url = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(url);
+            }
+        }
+
+        function renderThemes() {
+            const grid = document.getElementById('themeGrid');
+            grid.innerHTML = '';
+            
+            THEMES.forEach((theme, idx) => {
+                const div = document.createElement('div');
+                div.className = `theme-option ${idx === state.theme ? 'selected' : ''}`;
+                div.style.background = `linear-gradient(135deg, ${theme.gradient[0]}, ${theme.gradient[1]})`;
+                div.onclick = () => selectTheme(idx);
+                div.setAttribute('role', 'button');
+                div.setAttribute('aria-label', theme.name);
+                grid.appendChild(div);
+            });
+        }
+
+        function selectTheme(idx) {
+            state.theme = idx;
+            renderThemes();
+        }
+
+        function updateFontSelect() {
+            const select = document.getElementById('fontSelect');
+            select.innerHTML = '';
+            
+            FONTS[state.language].forEach(font => {
+                const opt = document.createElement('option');
+                opt.value = font.family;
+                opt.textContent = font.name;
+                opt.selected = font.family === state.font;
+                select.appendChild(opt);
+            });
+        }
+
+        function updateFontPreview() {
+            const preview = document.getElementById('fontPreview');
+            const currentFont = FONTS[state.language].find(f => f.family === state.font);
+            if (currentFont) {
+                preview.textContent = currentFont.preview;
+                preview.style.fontFamily = `"${state.font}", sans-serif`;
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('language').addEventListener('change', e => {
+                state.language = e.target.value;
+                state.message = DEFAULT_MESSAGES[state.language];
+                document.getElementById('message').value = state.message;
+                state.font = FONTS[state.language][0].family;
+                updateFontSelect();
+                updateFontPreview();
+            });
+
+            document.getElementById('message').addEventListener('input', e => {
+                state.message = e.target.value;
+            });
+
+            document.querySelectorAll('.align-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.textAlign = btn.dataset.align;
+                });
+            });
+
+            document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
+            document.getElementById('removeImage').addEventListener('click', removeImage);
+
+            document.getElementById('fontSelect').addEventListener('change', e => {
+                state.font = e.target.value;
+                updateFontPreview();
+            });
+
+            const fontSizeInput = document.getElementById('fontSize');
+            fontSizeInput.addEventListener('input', e => {
+                state.fontSize = parseInt(e.target.value);
+                document.getElementById('fontSizeValue').textContent = `${state.fontSize}px`;
+            });
+
+            document.getElementById('cardCount').addEventListener('change', e => {
+                state.cardCount = parseInt(e.target.value);
+            });
+
+            document.getElementById('generateBtn').addEventListener('click', generatePreview);
+            document.getElementById('downloadBtn').addEventListener('click', downloadCards);
+            document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        async function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            state.imageFile = file;
+            document.getElementById('fileInfo').textContent = `✓ ${file.name}`;
+
+            const img = new Image();
+            const reader = new FileReader();
+
+            reader.onload = async event => {
+                img.onload = async () => {
+                    const processed = await processImage(img);
+                    state.image = processed;
+                    
+                    const previewImg = document.getElementById('imagePreview');
+                    previewImg.src = processed.toDataURL();
+                    document.getElementById('imagePreviewWrapper').style.display = 'block';
+                };
+                img.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        async function processImage(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > MAX_IMAGE_SIZE || height > MAX_IMAGE_SIZE) {
+                const ratio = Math.min(MAX_IMAGE_SIZE / width, MAX_IMAGE_SIZE / height);
+                width = width * ratio;
+                height = height * ratio;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            return canvas;
+        }
+
+        function removeImage() {
+            state.image = null;
+            state.imageFile = null;
+            document.getElementById('imageUpload').value = '';
+            document.getElementById('fileInfo').textContent = 'చిత్రం లేదు';
+            document.getElementById('imagePreviewWrapper').style.display = 'none';
+        }
+
+        function generatePreview() {
+            const canvas = document.getElementById('preview');
+            const ctx = canvas.getContext('2d');
+
+            drawCard(ctx);
+
+            state.previewGenerated = true;
+            document.getElementById('downloadBtn').disabled = false;
+            
+            showStatus('✓ Preview generated! Click Download to save.', 'success');
+        }
+
+        function drawCard(ctx) {
+            const theme = THEMES[state.theme];
+            
+            const grad = ctx.createLinearGradient(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            grad.addColorStop(0, theme.gradient[0]);
+            grad.addColorStop(1, theme.gradient[1]);
+            
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            if (state.image) {
+                drawCroppedImage(ctx);
+            }
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            ctx.fillStyle = 'white';
+            ctx.font = `700 ${state.fontSize}px "${state.font}", sans-serif`;
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+
+            const lines = state.message.split('\n');
+            const lineHeight = state.fontSize * 1.4;
+            const totalHeight = lines.length * lineHeight;
+            const startY = (CANVAS_SIZE - totalHeight) / 2 + lineHeight / 2;
+
+            if (state.textAlign === 'center') {
+                ctx.textAlign = 'center';
+                lines.forEach((line, idx) => {
+                    ctx.fillText(line, CANVAS_SIZE / 2, startY + idx * lineHeight);
+                });
+            } else if (state.textAlign === 'left') {
+                ctx.textAlign = 'left';
+                lines.forEach((line, idx) => {
+                    ctx.fillText(line, 80, startY + idx * lineHeight);
+                });
+            } else {
+                ctx.textAlign = 'right';
+                lines.forEach((line, idx) => {
+                    ctx.fillText(line, CANVAS_SIZE - 80, startY + idx * lineHeight);
+                });
+            }
+        }
+
+        function drawCroppedImage(ctx) {
+            const img = state.image;
+            const size = Math.min(img.width, img.height);
+            const x = (img.width - size) / 2;
+            const y = (img.height - size) / 2;
+            
+            ctx.drawImage(img, x, y, size, size, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        }
+
+        async function downloadCards() {
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('downloadBtn').disabled = true;
+
+            await new Promise(r => setTimeout(r, 100));
+
+            const canvas = document.getElementById('preview');
+
+            for (let i = 1; i <= state.cardCount; i++) {
+                const link = document.createElement('a');
+                link.download = `Subhasayah_NewYear_2026_Card_${i}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+                
+                await new Promise(r => setTimeout(r, 300));
+            }
+
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('downloadBtn').disabled = false;
+            showStatus(`🎉 ${state.cardCount} card(s) downloaded! WhatsApp కి షేర్ చేయండి!`, 'success');
+        }
+
+        function resetAll() {
+            if (!confirm('అన్ని సెట్టింగ్‌లను రీసెట్ చేయాలా? / Reset all settings?')) return;
+            
+            state = {
+                language: 'te',
+                message: DEFAULT_MESSAGES.te,
+                image: null,
+                imageFile: null,
+                theme: 0,
+                font: FONTS.te[0].family,
+                fontSize: 40,
+                textAlign: 'center',
+                cardCount: 1,
+                previewGenerated: false
+            };
+
+            document.getElementById('language').value = 'te';
+            document.getElementById('message').value = state.message;
+            document.getElementById('fontSize').value = 40;
+            document.getElementById('fontSizeValue').textContent = '40px';
+            document.getElementById('cardCount').value = 1;
+            
+            removeImage();
+            renderThemes();
+            updateFontSelect();
+            updateFontPreview();
+            
+            document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-align="center"]').classList.add('active');
+            
+            document.getElementById('downloadBtn').disabled = true;
+            generatePreview();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showStatus('✓ Reset complete! / రీసెట్ పూర్తయింది!', 'success');
+        }
+
+        function showStatus(msg, type) {
+            const status = document.getElementById('status');
+            status.textContent = msg;
+            status.className = `status show ${type}`;
+            
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 5000);
+        }
+
+        function setupPWA() {
+            window.addEventListener('beforeinstallprompt', e => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPrompt').classList.add('show');
+            });
+
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    document.getElementById('installPrompt').classList.remove('show');
+                }
+                
+                deferredPrompt = null;
+            });
+
+            window.addEventListener('appinstalled', () => {
+                document.getElementById('installPrompt').classList.remove('show');
+                showStatus('✓ యాప్ ఇన్‌స్టాల్ చేయబడింది! / App installed!', 'success');
+            });
+        }
+
+        document.getElementById('message').value = DEFAULT_MESSAGES.te;
+        init();
+    </script>
 </body>
 </html>
