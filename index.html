@@ -747,34 +747,7 @@ self.addEventListener('activate', e => {
                 navigator.serviceWorker.register(url);
             }
         }
-        function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        // We use a data URI or a Blob, but Note: 
-        // Chrome sometimes requires a physical file to trigger the 'installable' flag.
-        const sw = `
-const CACHE = 'subhasayah-v1';
-const urls = ['./', 'index.html']; // Explicitly cache index
-
-self.addEventListener('install', e => {
-    self.skipWaiting();
-});
-
-self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request).then(res => res || fetch(e.request))
-    );
-});
-
-self.addEventListener('activate', e => {
-    e.waitUntil(self.clients.claim());
-});`;
-        const blob = new Blob([sw], { type: 'application/javascript' });
-        const url = URL.createObjectURL(blob);
-        navigator.serviceWorker.register(url).then(() => {
-            console.log("Service Worker Active");
-        }).catch(err => console.log("SW Error:", err));
-    }
-}
+       
 
         function renderThemes() {
             const grid = document.getElementById('themeGrid');
