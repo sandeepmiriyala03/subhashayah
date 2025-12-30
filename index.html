@@ -1030,31 +1030,37 @@ function generatePreview() {
             }, 5000);
         }
 
-        function setupPWA() {
-            window.addEventListener('beforeinstallprompt', e => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('installPrompt').classList.add('show');
-            });
+     function setupPWA() {
+  // 1. Check PWA criteria
+  if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+    window.addEventListener('beforeinstallprompt', e => {
+      console.log('🎉 Native PWA ready!');
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installPrompt').classList.add('show');
+    });
+  }
 
-            document.getElementById('installBtn').addEventListener('click', async () => {
-                if (!deferredPrompt) return;
+  // 2. FORCE button (always shows)
+  setTimeout(() => {
+    document.getElementById('installPrompt').classList.add('show');
+    console.log('🔧 Install button forced (GitHub Pages workaround)');
+  }, 2000);
 
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                
-                if (outcome === 'accepted') {
-                    document.getElementById('installPrompt').classList.remove('show');
-                }
-                
-                deferredPrompt = null;
-            });
-
-            window.addEventListener('appinstalled', () => {
-                document.getElementById('installPrompt').classList.remove('show');
-                showStatus('✓ యాప్ ఇన్‌స్టాల్ చేయబడింది! / App installed!', 'success');
-            });
-        }
+  // 3. Install handler
+  document.getElementById('installBtn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      // Native install
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') document.getElementById('installPrompt').classList.remove('show');
+      deferredPrompt = null;
+    } else {
+      // Manual instructions
+      showStatus('📱 Chrome: ⋮ → Install Subhāśayaḥ', 'success');
+    }
+  });
+}
 
         document.getElementById('message').value = DEFAULT_MESSAGES.te;
         init();
