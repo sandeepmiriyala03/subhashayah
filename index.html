@@ -680,7 +680,7 @@
 
         function init() {
             createManifest();
-            registerServiceWorker();
+           registerServiceWorker();
             renderThemes();
             updateFontSelect();
             setupEventListeners();
@@ -688,6 +688,14 @@
             updateFontPreview();
             generatePreview();
         }
+
+        function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('✅ Service Worker registered'))
+      .catch(err => console.log('❌ SW error:', err));
+  }
+}
 
       function createManifest() {
   const MANIFEST = {
@@ -721,32 +729,7 @@
   document.getElementById('manifestLink').href = url;
 }
 
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                const sw = `
-const CACHE = 'subhasayah-v1';
-const urls = ['./'];
-self.addEventListener('install', e => {
-    e.waitUntil(caches.open(CACHE).then(c => c.addAll(urls)));
-    self.skipWaiting();
-});
-self.addEventListener('fetch', e => {
-    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(f => {
-        return caches.open(CACHE).then(c => {
-            c.put(e.request, f.clone());
-            return f;
-        });
-    }).catch(() => caches.match('./'))));
-});
-self.addEventListener('activate', e => {
-    e.waitUntil(caches.keys().then(ks => Promise.all(ks.map(k => k !== CACHE && caches.delete(k)))));
-    self.clients.claim();
-});`;
-                const blob = new Blob([sw], { type: 'application/javascript' });
-                const url = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(url);
-            }
-        }
+       
        
 
         function renderThemes() {
