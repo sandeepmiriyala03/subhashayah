@@ -1030,37 +1030,44 @@ function generatePreview() {
             }, 5000);
         }
 
-     function setupPWA() {
-  // 1. Check PWA criteria
-  if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-    window.addEventListener('beforeinstallprompt', e => {
-      console.log('🎉 Native PWA ready!');
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installPrompt').classList.add('show');
-    });
-  }
+    function setupPWA() {
+  console.log('🔍 PWA: Always visible install button');
+  
+  // IMMEDIATELY show install button (no delay)
+  document.getElementById('installPrompt').classList.add('show');
+  
+  let installPromptEvent;
+  window.addEventListener('beforeinstallprompt', e => {
+    console.log('🎉 Native PWA ready!');
+    e.preventDefault();
+    installPromptEvent = e;
+  });
 
-  // 2. FORCE button (always shows)
-  setTimeout(() => {
-    document.getElementById('installPrompt').classList.add('show');
-    console.log('🔧 Install button forced (GitHub Pages workaround)');
-  }, 2000);
-
-  // 3. Install handler
   document.getElementById('installBtn').addEventListener('click', async () => {
-    if (deferredPrompt) {
-      // Native install
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') document.getElementById('installPrompt').classList.remove('show');
-      deferredPrompt = null;
+    console.log('🔧 Install clicked');
+    
+    if (installPromptEvent) {
+      // Native install works
+      installPromptEvent.prompt();
+      const { outcome } = await installPromptEvent.userChoice;
+      if (outcome === 'accepted') {
+        document.getElementById('installPrompt').style.display = 'none';
+        showStatus('✓ PWA installed!', 'success');
+      }
+      installPromptEvent = null;
     } else {
-      // Manual instructions
-      showStatus('📱 Chrome: ⋮ → Install Subhāśayaḥ', 'success');
+      // Manual instructions (GitHub Pages)
+      showStatus('📱 Chrome ⋮ → "Install Subhāśayaḥ" క్లిక్ చేయండి', 'success');
     }
   });
+
+  // Hide only on native success
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('installPrompt').style.display = 'none';
+    showStatus('✓ యాప్ ఇన్‌స్టాల్ అయింది!', 'success');
+  });
 }
+
 
         document.getElementById('message').value = DEFAULT_MESSAGES.te;
         init();
