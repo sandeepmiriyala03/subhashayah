@@ -901,18 +901,25 @@ self.addEventListener('activate', e => {
             document.getElementById('fileInfo').textContent = 'చిత్రం లేదు';
             document.getElementById('imagePreviewWrapper').style.display = 'none';
         }
+function generatePreview() {
+  const canvas = document.getElementById('preview');
+  const ctx = canvas.getContext('2d');
+  
+  // High-DPI retina support
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = CANVAS_SIZE * dpr;
+  canvas.height = CANVAS_SIZE * dpr;
+  canvas.style.width = CANVAS_SIZE + 'px';
+  canvas.style.height = CANVAS_SIZE + 'px';
+  ctx.scale(dpr, dpr);
+  
+  drawCard(ctx);
+  
+  state.previewGenerated = true;
+  document.getElementById('downloadBtn').disabled = false;
+  showStatus('✓ Preview generated! Click Download to save.', 'success');
+}
 
-        function generatePreview() {
-            const canvas = document.getElementById('preview');
-            const ctx = canvas.getContext('2d');
-
-            drawCard(ctx);
-
-            state.previewGenerated = true;
-            document.getElementById('downloadBtn').disabled = false;
-            
-            showStatus('✓ Preview generated! Click Download to save.', 'success');
-        }
 
         function drawCard(ctx) {
             const theme = THEMES[state.theme];
