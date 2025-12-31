@@ -1,11 +1,36 @@
 {
-  "name": "Subhāśayaḥ Greetings",
+  "name": "Subhāśayaḥ - నూతన సంవత్సర శుభాకాంక్షలు 2026",
   "short_name": "Subhāśayaḥ",
-  "start_url": ".",
+  "description": "Create beautiful New Year 2026 greeting cards in Telugu, English, and Sanskrit. Works offline! Perfect for WhatsApp sharing.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f7f6",
-  "theme_color": "#1a4731",
+  "background_color": "#FFF8E1",
+  "theme_color": "#E91E63",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "te",
+  "dir": "ltr",
+  "categories": ["lifestyle", "utilities", "social"],
   "icons": [
-    { "src": "https://cdn-icons-png.flaticon.com/512/3566/3566511.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Ccircle cx='96' cy='96' r='96' fill='%23E91E63'/%3E%3Ctext x='96' y='120' font-size='80' text-anchor='middle' fill='white' font-weight='bold' font-family='Arial'%3E2026%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23E91E63'/%3E%3Ctext x='256' y='320' font-size='200' text-anchor='middle' fill='white' font-weight='bold' font-family='Arial'%3E2026%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'%3E%3Crect width='540' height='720' fill='%23FFF8E1'/%3E%3Ctext x='270' y='360' font-size='40' text-anchor='middle' fill='%23E91E63' font-weight='bold'%3ESubh%C4%81%C5%9Bayah%3C/text%3E%3C/svg%3E",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
   ]
 }

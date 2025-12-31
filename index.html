@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Create beautiful New Year greeting cards in Telugu, English, and Sanskrit - Works offline!">
+    <meta name="description" content="Create beautiful New Year 2026 greeting cards in Telugu, English, and Sanskrit. Works offline!">
     <meta name="theme-color" content="#E91E63">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Subhāśayaḥ - నూతన సంవత్సర శుభాకాంక్షలు 2026</title>
-    <link rel="manifest" id="manifestLink">
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Playfair+Display:wght@700&family=Merriweather:wght@700&family=Lora:wght@700&family=Roboto:wght@700&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Chathura:wght@100;300;400;700;800&family=Ramaraja&family=Ponnala&family=Sree+Krushnadevaraya&family=Playfair+Display:wght@700&family=Merriweather:wght@700&family=Lora:wght@700&family=Roboto:wght@700&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@700&family=Poppins:wght@700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -168,6 +168,39 @@
             font-weight: 600;
         }
 
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary);
+            background: #FCE4EC;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
         .file-upload {
             position: relative;
             overflow: hidden;
@@ -213,6 +246,8 @@
             margin-top: 10px;
             text-align: center;
             position: relative;
+            display: inline-block;
+            width: 100%;
         }
 
         .image-preview-wrapper img {
@@ -222,23 +257,32 @@
             box-shadow: var(--shadow-sm);
         }
 
-        .remove-image {
-            position: absolute;
-            top: 6px;
-            right: 6px;
+        .image-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .img-action-btn {
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 34px;
-            height: 34px;
-            font-size: 22px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s;
+        }
+
+        .img-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .img-action-btn.secondary {
+            background: var(--text-light);
         }
 
         .theme-grid {
@@ -551,6 +595,20 @@
         </div>
 
         <div class="card">
+            <label>చిత్రం రకం / Image Mode</label>
+            <div class="radio-group">
+                <label class="radio-option" data-mode="none">
+                    <input type="radio" name="imageMode" value="none">
+                    <span>⚪ కార్డ్ మాత్రమే (No Background Image)</span>
+                </label>
+                <label class="radio-option selected" data-mode="with">
+                    <input type="radio" name="imageMode" value="with" checked>
+                    <span>🔵 చిత్రంతో (With Background Image)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="card" id="imageUploadCard">
             <label for="imageUpload">చిత్రం / Upload Image (Optional)</label>
             <div class="file-upload">
                 <button class="file-btn" type="button">📷 చిత్రం ఎంచుకోండి</button>
@@ -559,9 +617,20 @@
             <div class="file-info" id="fileInfo">చిత్రం లేదు</div>
             <div class="image-preview-wrapper" id="imagePreviewWrapper" style="display: none;">
                 <img id="imagePreview" src="" alt="Image preview">
-                <button class="remove-image" id="removeImage" type="button" aria-label="Remove image">×</button>
+                <div class="image-actions">
+                    <button class="img-action-btn" id="cropImageBtn" type="button">✂️ Crop</button>
+                    <button class="img-action-btn" id="rotateImageBtn" type="button">↻ Rotate</button>
+                    <button class="img-action-btn secondary" id="removeImage" type="button">🗑️ Remove</button>
+                </div>
             </div>
-            <div class="help-text">ఆటో-రొటేట్ & క్రాప్. చదరపు చిత్రాలు బాగా పని చేస్తాయి</div>
+
+            <label style="margin-top: 16px;">చిత్ర స్థానం / Image Position</label>
+            <div class="text-align-btns" id="imagePositionBtns" style="display: none;">
+                <button class="align-btn" data-position="left">◧<br><small>Left</small></button>
+                <button class="align-btn active" data-position="full">▣<br><small>Full</small></button>
+                <button class="align-btn" data-position="right">◨<br><small>Right</small></button>
+            </div>
+            <div class="help-text">ఆటో-క్రాప్ 1024×1024. మాన్యువల్ క్రాప్ & రొటేట్ బటన్లు</div>
         </div>
 
         <div class="card">
@@ -578,20 +647,24 @@
         <div class="card">
             <label for="fontSize">ఫాంట్ పరిమాణం / Font Size</label>
             <div class="slider-container">
-                <input type="range" id="fontSize" min="10" max="100" value="40" aria-label="Font size">
-                <div class="range-value" id="fontSizeValue">40px</div>
+                <input type="range" id="fontSize" min="12" max="25" value="18" aria-label="Font size">
+                <div class="range-value" id="fontSizeValue">18px</div>
             </div>
+            <div class="help-text">Min: Device-responsive (12-16px), Max: 25px</div>
         </div>
 
         <div class="card">
-            <label for="cardCount">కార్డుల సంఖ్య / Card Count</label>
-            <select id="cardCount" aria-label="Number of cards">
-                <option value="1">1 కార్డ్</option>
-                <option value="2">2 కార్డులు</option>
-                <option value="3">3 కార్డులు</option>
-                <option value="4">4 కార్డులు</option>
-                <option value="5">5 కార్డులు</option>
-            </select>
+            <label>డౌన్‌లోడ్ ఎంపిక / Download Option</label>
+            <div class="radio-group">
+                <label class="radio-option selected" data-download="single">
+                    <input type="radio" name="downloadMode" value="single" checked>
+                    <span>🔵 ఒక కార్డ్ (Single Card)<br><small>Selected theme only</small></span>
+                </label>
+                <label class="radio-option" data-download="all">
+                    <input type="radio" name="downloadMode" value="all">
+                    <span>⚪ అన్ని థీమ్‌లు (All 9 Themes Pack)<br><small>Same message, all themes</small></span>
+                </label>
+            </div>
         </div>
 
         <div class="card btn-group">
@@ -621,7 +694,7 @@
         const MAX_IMAGE_SIZE = 2048;
         
         const DEFAULT_MESSAGES = {
-            te: `నూతన సంవత్సర శుభాకాంక్షలు ${YEAR}!\n\nమీకు మరియు మీ కుటుంబానికి\nసంతోషం, ఆరోగ్యం మరియు\nసమృద్ధి కలుగాలని కోరుకుంటున్నాను.`,
+            te: `నూతన సంవత్సర శుభాకాంక్షలు ${YEAR}!\n\nమీకు మరియు మీ కుటుంబానికి\nసంతోషం, ఆరోగ్యం మరియు\nసమృద్ధి కలగాలని కోరుకుంటున్నాను.`,
             en: `Happy New Year ${YEAR}!\n\nWishing you and your family\njoy, health, and prosperity\nin the year ahead.`,
             sa: `नूतनवर्षस्य शुभाशयाः ${YEAR}!\n\nभवते भवतः परिवाराय च\nआनन्दः आरोग्यं समृद्धिः च भवन्तु।`
         };
@@ -646,8 +719,13 @@
                 { name: 'Mandali', family: 'Mandali', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
                 { name: 'NTR', family: 'NTR', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
                 { name: 'RaviPrakash', family: 'RaviPrakash', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
-                { name: 'TenaliRamakrishna', family: 'Tenali Ramakrishna', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
-                { name: 'Timmana', family: 'Timmana', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' }
+                { name: 'Tenali Ramakrishna', family: 'Tenali Ramakrishna', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Timmana', family: 'Timmana', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Chathura Bold', family: 'Chathura', weight: '700', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Chathura ExtraBold', family: 'Chathura', weight: '800', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Ramaraja', family: 'Ramaraja', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Ponnala', family: 'Ponnala', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' },
+                { name: 'Sree Krushnadevaraya', family: 'Sree Krushnadevaraya', preview: 'ఇంచక్కటి తెలుగు వదలి ఇతర భాషలెందుకురా..' }
             ],
             en: [
                 { name: 'Playfair Display', family: 'Playfair Display', preview: 'Happy New Year 2026!' },
@@ -666,71 +744,55 @@
         let state = {
             language: 'te',
             message: DEFAULT_MESSAGES.te,
+            imageMode: 'with',
             image: null,
             imageFile: null,
+            originalImage: null,
+            imageRotation: 0,
+            imagePosition: 'full',
             theme: 0,
             font: FONTS.te[0].family,
-            fontSize: 40,
+            fontWeight: '400',
+            fontSize: 18,
             textAlign: 'center',
-            cardCount: 1,
+            downloadMode: 'single',
             previewGenerated: false
         };
 
         let deferredPrompt = null;
 
         function init() {
-            createManifest();
-           registerServiceWorker();
+            registerServiceWorker();
             renderThemes();
             updateFontSelect();
             setupEventListeners();
             setupPWA();
             updateFontPreview();
+            updateMinFontSize();
             generatePreview();
         }
 
         function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('✅ Service Worker registered'))
-      .catch(err => console.log('❌ SW error:', err));
-  }
-}
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker registered');
+                }).catch(err => {
+                    console.log('Service Worker registration failed:', err);
+                });
+            }
+        }
 
-      function createManifest() {
-  const MANIFEST = {
-    name: "Subhāśayaḥ - 2026",
-    short_name: "Subhāśayaḥ",
-    start_url: ".",
-    display: "standalone",
-    background_color: "#E91E63",
-    theme_color: "#E91E63",
-    icons: [
-      {
-        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
-        sizes: "192x192",
-        type: "image/svg+xml",
-        purpose: "any maskable"
-      },
-      {
-        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23E91E63'/%3E%3Ctext x='50' y='65' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3E2026%3C/text%3E%3C/svg%3E",
-        sizes: "512x512",
-        type: "image/svg+xml",
-        purpose: "any maskable"
-      }
-    ]
-  };
-
-  const blob = new Blob(
-    [JSON.stringify(MANIFEST)],
-    { type: 'application/json' }
-  );
-  const url = URL.createObjectURL(blob);
-  document.getElementById('manifestLink').href = url;
-}
-
-       
-       
+        function updateMinFontSize() {
+            const width = window.innerWidth;
+            const slider = document.getElementById('fontSize');
+            if (width < 480) {
+                slider.min = 12;
+            } else if (width < 768) {
+                slider.min = 14;
+            } else {
+                slider.min = 16;
+            }
+        }
 
         function renderThemes() {
             const grid = document.getElementById('themeGrid');
@@ -758,9 +820,11 @@
             
             FONTS[state.language].forEach(font => {
                 const opt = document.createElement('option');
-                opt.value = font.family;
+                opt.value = JSON.stringify({ family: font.family, weight: font.weight || '400' });
                 opt.textContent = font.name;
-                opt.selected = font.family === state.font;
+                const currentFont = JSON.stringify({ family: state.font, weight: state.fontWeight });
+                const optFont = JSON.stringify({ family: font.family, weight: font.weight || '400' });
+                opt.selected = currentFont === optFont;
                 select.appendChild(opt);
             });
         }
@@ -771,6 +835,7 @@
             if (currentFont) {
                 preview.textContent = currentFont.preview;
                 preview.style.fontFamily = `"${state.font}", sans-serif`;
+                preview.style.fontWeight = state.fontWeight;
             }
         }
 
@@ -779,7 +844,9 @@
                 state.language = e.target.value;
                 state.message = DEFAULT_MESSAGES[state.language];
                 document.getElementById('message').value = state.message;
-                state.font = FONTS[state.language][0].family;
+                const firstFont = FONTS[state.language][0];
+                state.font = firstFont.family;
+                state.fontWeight = firstFont.weight || '400';
                 updateFontSelect();
                 updateFontPreview();
             });
@@ -790,17 +857,51 @@
 
             document.querySelectorAll('.align-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     state.textAlign = btn.dataset.align;
                 });
             });
 
+            document.querySelectorAll('[name="imageMode"]').forEach(radio => {
+                radio.addEventListener('change', e => {
+                    state.imageMode = e.target.value;
+                    document.querySelectorAll('[data-mode]').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    e.target.closest('.radio-option').classList.add('selected');
+                    updateImageCard();
+                });
+            });
+
+            document.querySelectorAll('[data-position]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-position]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.imagePosition = btn.dataset.position;
+                });
+            });
+
+            document.querySelectorAll('[name="downloadMode"]').forEach(radio => {
+                radio.addEventListener('change', e => {
+                    state.downloadMode = e.target.value;
+                    document.querySelectorAll('[data-download]').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    e.target.closest('.radio-option').classList.add('selected');
+                });
+            });
+
             document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
             document.getElementById('removeImage').addEventListener('click', removeImage);
+            document.getElementById('cropImageBtn').addEventListener('click', cropImage);
+            document.getElementById('rotateImageBtn').addEventListener('click', rotateImage);
 
             document.getElementById('fontSelect').addEventListener('change', e => {
-                state.font = e.target.value;
+                const fontData = JSON.parse(e.target.value);
+                state.font = fontData.family;
+                state.fontWeight = fontData.weight;
                 updateFontPreview();
             });
 
@@ -808,10 +909,6 @@
             fontSizeInput.addEventListener('input', e => {
                 state.fontSize = parseInt(e.target.value);
                 document.getElementById('fontSizeValue').textContent = `${state.fontSize}px`;
-            });
-
-            document.getElementById('cardCount').addEventListener('change', e => {
-                state.cardCount = parseInt(e.target.value);
             });
 
             document.getElementById('generateBtn').addEventListener('click', generatePreview);
@@ -830,6 +927,21 @@
             backToTop.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+
+            window.addEventListener('resize', updateMinFontSize);
+        }
+
+        function updateImageCard() {
+            const card = document.getElementById('imageUploadCard');
+            const positionBtns = document.getElementById('imagePositionBtns');
+            if (state.imageMode === 'none') {
+                card.style.display = 'none';
+            } else {
+                card.style.display = 'block';
+                if (state.image) {
+                    positionBtns.style.display = 'flex';
+                }
+            }
         }
 
         async function handleImageUpload(e) {
@@ -837,6 +949,7 @@
             if (!file) return;
 
             state.imageFile = file;
+            state.imageRotation = 0;
             document.getElementById('fileInfo').textContent = `✓ ${file.name}`;
 
             const img = new Image();
@@ -845,11 +958,13 @@
             reader.onload = async event => {
                 img.onload = async () => {
                     const processed = await processImage(img);
-                    state.image = processed;
+                    state.originalImage = processed;
+                    state.image = await autoCropToSquare(processed);
                     
                     const previewImg = document.getElementById('imagePreview');
-                    previewImg.src = processed.toDataURL();
+                    previewImg.src = state.image.toDataURL();
                     document.getElementById('imagePreviewWrapper').style.display = 'block';
+                    document.getElementById('imagePositionBtns').style.display = 'flex';
                 };
                 img.src = event.target.result;
             };
@@ -877,35 +992,85 @@
             return canvas;
         }
 
+        async function autoCropToSquare(sourceCanvas) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const size = 1024;
+            const sourceSize = Math.min(sourceCanvas.width, sourceCanvas.height);
+            const x = (sourceCanvas.width - sourceSize) / 2;
+            const y = (sourceCanvas.height - sourceSize) / 2;
+            
+            canvas.width = size;
+            canvas.height = size;
+            ctx.drawImage(sourceCanvas, x, y, sourceSize, sourceSize, 0, 0, size, size);
+            
+            return canvas;
+        }
+
+        function cropImage() {
+            if (!state.originalImage) return;
+            
+            autoCropToSquare(state.originalImage).then(cropped => {
+                const previewImg = document.getElementById('imagePreview');
+                previewImg.src = cropped.toDataURL();
+                state.image = cropped;
+                showStatus('✓ చిత్రం క్రాప్ చేయబడింది! / Image cropped to 1024×1024!', 'success');
+            });
+        }
+
+        function rotateImage() {
+            if (!state.image) return;
+            
+            state.imageRotation = (state.imageRotation + 90) % 360;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            if (state.imageRotation === 90 || state.imageRotation === 270) {
+                canvas.width = state.image.height;
+                canvas.height = state.image.width;
+            } else {
+                canvas.width = state.image.width;
+                canvas.height = state.image.height;
+            }
+            
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(state.imageRotation * Math.PI / 180);
+            ctx.drawImage(state.image, -state.image.width / 2, -state.image.height / 2);
+            
+            state.image = canvas;
+            const previewImg = document.getElementById('imagePreview');
+            previewImg.src = canvas.toDataURL();
+            
+            showStatus(`✓ ${state.imageRotation}° రొటేట్ చేయబడింది! / Rotated ${state.imageRotation}°!`, 'success');
+        }
+
         function removeImage() {
             state.image = null;
             state.imageFile = null;
+            state.originalImage = null;
+            state.imageRotation = 0;
             document.getElementById('imageUpload').value = '';
             document.getElementById('fileInfo').textContent = 'చిత్రం లేదు';
             document.getElementById('imagePreviewWrapper').style.display = 'none';
+            document.getElementById('imagePositionBtns').style.display = 'none';
         }
-function generatePreview() {
-  const canvas = document.getElementById('preview');
-  const ctx = canvas.getContext('2d');
-  
-  // High-DPI retina support
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = CANVAS_SIZE * dpr;
-  canvas.height = CANVAS_SIZE * dpr;
-  canvas.style.width = CANVAS_SIZE + 'px';
-  canvas.style.height = CANVAS_SIZE + 'px';
-  ctx.scale(dpr, dpr);
-  
-  drawCard(ctx);
-  
-  state.previewGenerated = true;
-  document.getElementById('downloadBtn').disabled = false;
-  showStatus('✓ Preview generated! Click Download to save.', 'success');
-}
 
+        function generatePreview() {
+            const canvas = document.getElementById('preview');
+            const ctx = canvas.getContext('2d');
 
-        function drawCard(ctx) {
-            const theme = THEMES[state.theme];
+            drawCard(ctx, state.theme);
+
+            state.previewGenerated = true;
+            document.getElementById('downloadBtn').disabled = false;
+            
+            showStatus('✓ Preview generated! Click Download to save.', 'success');
+        }
+
+        function drawCard(ctx, themeIndex) {
+            const theme = THEMES[themeIndex];
             
             const grad = ctx.createLinearGradient(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             grad.addColorStop(0, theme.gradient[0]);
@@ -914,45 +1079,27 @@ function generatePreview() {
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-            if (state.image) {
-                drawCroppedImage(ctx);
+            if (state.imageMode === 'with' && state.image) {
+                if (state.imagePosition === 'full') {
+                    drawFullImage(ctx);
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+                } else if (state.imagePosition === 'left') {
+                    drawHalfImage(ctx, 'left');
+                } else if (state.imagePosition === 'right') {
+                    drawHalfImage(ctx, 'right');
+                }
             }
 
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-
-            ctx.fillStyle = 'white';
-            ctx.font = `700 ${state.fontSize}px "${state.font}", sans-serif`;
-            ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-            ctx.shadowBlur = 12;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-
-            const lines = state.message.split('\n');
-            const lineHeight = state.fontSize * 1.4;
-            const totalHeight = lines.length * lineHeight;
-            const startY = (CANVAS_SIZE - totalHeight) / 2 + lineHeight / 2;
-
-            if (state.textAlign === 'center') {
-                ctx.textAlign = 'center';
-                lines.forEach((line, idx) => {
-                    ctx.fillText(line, CANVAS_SIZE / 2, startY + idx * lineHeight);
-                });
-            } else if (state.textAlign === 'left') {
-                ctx.textAlign = 'left';
-                lines.forEach((line, idx) => {
-                    ctx.fillText(line, 80, startY + idx * lineHeight);
-                });
-            } else {
-                ctx.textAlign = 'right';
-                lines.forEach((line, idx) => {
-                    ctx.fillText(line, CANVAS_SIZE - 80, startY + idx * lineHeight);
-                });
+            if (state.imageMode === 'none' || !state.image) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             }
+
+            drawText(ctx);
         }
 
-        function drawCroppedImage(ctx) {
+        function drawFullImage(ctx) {
             const img = state.image;
             const size = Math.min(img.width, img.height);
             const x = (img.width - size) / 2;
@@ -961,57 +1108,107 @@ function generatePreview() {
             ctx.drawImage(img, x, y, size, size, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
         }
 
+        function drawHalfImage(ctx, side) {
+            const img = state.image;
+            const halfWidth = CANVAS_SIZE / 2;
+            
+            if (side === 'left') {
+                ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, halfWidth, CANVAS_SIZE);
+            } else {
+                ctx.drawImage(img, 0, 0, img.width, img.height, halfWidth, 0, halfWidth, CANVAS_SIZE);
+            }
+        }
+
         async function downloadCards() {
             document.getElementById('loading').classList.add('show');
             document.getElementById('downloadBtn').disabled = true;
 
             await new Promise(r => setTimeout(r, 100));
 
-            const canvas = document.getElementById('preview');
+            if (state.downloadMode === 'single') {
+                await downloadSingleCard();
+            } else {
+                await downloadAllThemes();
+            }
 
-            for (let i = 1; i <= state.cardCount; i++) {
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        async function downloadSingleCard() {
+            const canvas = document.getElementById('preview');
+            const link = document.createElement('a');
+            const themeName = THEMES[state.theme].name;
+            link.download = `Subhasayah_NewYear_2026_${themeName}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+            
+            showStatus(`🎉 Card downloaded! WhatsApp కి షేర్ చేయండి!`, 'success');
+        }
+
+        async function downloadAllThemes() {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = CANVAS_SIZE;
+            tempCanvas.height = CANVAS_SIZE;
+            const ctx = tempCanvas.getContext('2d');
+
+            for (let i = 0; i < THEMES.length; i++) {
+                drawCard(ctx, i);
+                
                 const link = document.createElement('a');
-                link.download = `Subhasayah_NewYear_2026_Card_${i}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0);
+                const themeName = THEMES[i].name;
+                link.download = `Subhasayah_2026_Theme${i + 1}_${themeName}.png`;
+                link.href = tempCanvas.toDataURL('image/png', 1.0);
                 link.click();
                 
                 await new Promise(r => setTimeout(r, 300));
             }
 
-            document.getElementById('loading').classList.remove('show');
-            document.getElementById('downloadBtn').disabled = false;
-            showStatus(`🎉 ${state.cardCount} card(s) downloaded! WhatsApp కి షేర్ చేయండి!`, 'success');
+            showStatus(`🎉 All 9 cards downloaded! WhatsApp కి షేర్ చేయండి!`, 'success');
         }
 
         function resetAll() {
             if (!confirm('అన్ని సెట్టింగ్‌లను రీసెట్ చేయాలా? / Reset all settings?')) return;
             
+            const firstFont = FONTS.te[0];
             state = {
                 language: 'te',
                 message: DEFAULT_MESSAGES.te,
+                imageMode: 'with',
                 image: null,
                 imageFile: null,
+                originalImage: null,
+                imageRotation: 0,
+                imagePosition: 'full',
                 theme: 0,
-                font: FONTS.te[0].family,
-                fontSize: 40,
+                font: firstFont.family,
+                fontWeight: firstFont.weight || '400',
+                fontSize: 18,
                 textAlign: 'center',
-                cardCount: 1,
+                downloadMode: 'single',
                 previewGenerated: false
             };
 
             document.getElementById('language').value = 'te';
             document.getElementById('message').value = state.message;
-            document.getElementById('fontSize').value = 40;
-            document.getElementById('fontSizeValue').textContent = '40px';
-            document.getElementById('cardCount').value = 1;
+            document.getElementById('fontSize').value = 18;
+            document.getElementById('fontSizeValue').textContent = '18px';
+            document.querySelectorAll('[name="imageMode"]')[1].checked = true;
+            document.querySelectorAll('[name="downloadMode"]')[0].checked = true;
+            document.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('[data-mode="with"]')[0].classList.add('selected');
+            document.querySelectorAll('[data-download="single"]')[0].classList.add('selected');
             
             removeImage();
             renderThemes();
             updateFontSelect();
             updateFontPreview();
+            updateImageCard();
             
             document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector('[data-align="center"]').classList.add('active');
+            document.querySelectorAll('[data-align="center"]').forEach(b => b.classList.add('active'));
+            document.querySelectorAll('[data-position]').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('[data-position="full"]').forEach(b => b.classList.add('active'));
             
             document.getElementById('downloadBtn').disabled = true;
             generatePreview();
@@ -1030,44 +1227,65 @@ function generatePreview() {
             }, 5000);
         }
 
-    function setupPWA() {
-  console.log('🔍 PWA: Always visible install button');
-  
-  // IMMEDIATELY show install button (no delay)
-  document.getElementById('installPrompt').classList.add('show');
-  
-  let installPromptEvent;
-  window.addEventListener('beforeinstallprompt', e => {
-    console.log('🎉 Native PWA ready!');
-    e.preventDefault();
-    installPromptEvent = e;
-  });
+        function setupPWA() {
+            window.addEventListener('beforeinstallprompt', e => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPrompt').classList.add('show');
+            });
 
-  document.getElementById('installBtn').addEventListener('click', async () => {
-    console.log('🔧 Install clicked');
-    
-    if (installPromptEvent) {
-      // Native install works
-      installPromptEvent.prompt();
-      const { outcome } = await installPromptEvent.userChoice;
-      if (outcome === 'accepted') {
-        document.getElementById('installPrompt').style.display = 'none';
-        showStatus('✓ PWA installed!', 'success');
-      }
-      installPromptEvent = null;
-    } else {
-      // Manual instructions (GitHub Pages)
-      showStatus('📱 Chrome ⋮ → "Install Subhāśayaḥ" క్లిక్ చేయండి', 'success');
-    }
-  });
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (!deferredPrompt) return;
 
-  // Hide only on native success
-  window.addEventListener('appinstalled', () => {
-    document.getElementById('installPrompt').style.display = 'none';
-    showStatus('✓ యాప్ ఇన్‌స్టాల్ అయింది!', 'success');
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    document.getElementById('installPrompt').classList.remove('show');
+                }
+                
+                deferredPrompt = null;
+            });
+
+            window.addEventListener('appinstalled', () => {
+                document.getElementById('installPrompt').classList.remove('show');
+                showStatus('✓ యాప్ ఇన్‌స్టాల్ చేయబడింది! / App installed!', 'success');
+            });
+        }
+function drawText(ctx) {
+  ctx.fillStyle = 'white';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 2;
+  
+  const fontSize = state.fontSize;  // User's slider value
+  ctx.font = `${state.fontWeight} ${fontSize}px "${state.font}", sans-serif`;
+  
+  const BOX_WIDTH = CANVASSIZE * 0.85;
+  const words = state.message.split(/\s+/);
+  const lines = [];
+  let line = '';
+  
+  for (let word of words) {
+    const test = line + (line ? ' ' : '') + word;
+    if (ctx.measureText(test).width > BOX_WIDTH && line) {
+      lines.push(line);
+      line = word;
+    } else line = test;
+  }
+  if (line) lines.push(line);
+  
+  const lineHeight = fontSize * 1.35;
+  const totalHeight = lines.length * lineHeight;
+  const startY = (CANVASSIZE - totalHeight) / 2;
+  
+  lines.forEach((text, i) => {
+    ctx.textAlign = state.textAlign;
+    ctx.fillText(text, CANVASSIZE/2, startY + i * lineHeight);
   });
 }
-
 
         document.getElementById('message').value = DEFAULT_MESSAGES.te;
         init();
