@@ -991,22 +991,31 @@
             
             return canvas;
         }
+async function autoCropToSquare(sourceCanvas) {
+  const ctx = document.createElement('canvas').getContext('2d');
+  const size = 1024;
+  const testSize = 256;  // Test 16 quadrants
+  
+  let bestX = 0, bestY = 0, bestScore = 0;
+  
+  // Scan 16 positions, pick highest contrast area
+  for (let y = 0; y < 4; y++) {
+    for (let x = 0; x < 4; x++) {
+      const score = await getQuadrantContrast(sourceCanvas, x, y);
+      if (score > bestScore) {
+        bestX = x * (sourceCanvas.width/4);
+        bestY = y * (sourceCanvas.height/4);
+        bestScore = score;
+      }
+    }
+  }
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  ctx.drawImage(sourceCanvas, bestX, bestY, size, size, 0, 0, size, size);
+  return canvas;
+}
 
-        async function autoCropToSquare(sourceCanvas) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            const size = 1024;
-            const sourceSize = Math.min(sourceCanvas.width, sourceCanvas.height);
-            const x = (sourceCanvas.width - sourceSize) / 2;
-            const y = (sourceCanvas.height - sourceSize) / 2;
-            
-            canvas.width = size;
-            canvas.height = size;
-            ctx.drawImage(sourceCanvas, x, y, sourceSize, sourceSize, 0, 0, size, size);
-            
-            return canvas;
-        }
 
         function cropImage() {
             if (!state.originalImage) return;
