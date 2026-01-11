@@ -8,17 +8,16 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="description" content="Create circular image name badges. Privacy-first. No data stored.">
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 
-<!-- Google Fonts (Indian languages) -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
   font-family:system-ui,sans-serif;
-  background:#f7f7f7;
+  background:#f5f6f8;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -27,8 +26,13 @@ body{
 }
 
 h1{margin:4px 0;font-size:20px}
+small{color:#555}
 
-label{font-size:13px;font-weight:600}
+label{
+  font-size:13px;
+  font-weight:600;
+  align-self:flex-start;
+}
 
 select,input,button{
   width:260px;
@@ -43,6 +47,7 @@ button{
   color:#fff;
   font-weight:700;
   cursor:pointer;
+  border:none;
 }
 
 button:disabled{opacity:.5}
@@ -65,12 +70,27 @@ button:disabled{opacity:.5}
 .controls{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
   align-items:center;
 }
 
-.install-btn{
+/* FAB Install Button */
+.fab{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
   background:#000;
+  color:#fff;
+  font-size:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.3);
+  cursor:pointer;
+  z-index:1000;
 }
 
 canvas{display:none}
@@ -84,10 +104,10 @@ canvas{display:none}
 
 <div class="controls">
 
-<label>Upload Image</label>
+<label for="imgInput">Upload Image</label>
 <input type="file" accept="image/*" id="imgInput">
 
-<label>Language</label>
+<label for="language">Language</label>
 <select id="language">
   <option value="te">Telugu</option>
   <option value="en">English</option>
@@ -97,14 +117,13 @@ canvas{display:none}
   <option value="sa">Sanskrit</option>
 </select>
 
-<label>Font</label>
+<label for="fontSelect">Font</label>
 <select id="fontSelect"></select>
 
-<label>Enter Name</label>
+<label for="nameInput">Enter Name</label>
 <input type="text" id="nameInput" placeholder="Type name here">
 
 <button id="downloadBtn" disabled>⬇️ Download Image</button>
-<button id="installBtn" class="install-btn" hidden>📱 Install App</button>
 
 </div>
 
@@ -112,10 +131,13 @@ canvas{display:none}
   <img id="imgPreview">
 </div>
 
+<!-- FAB -->
+<div id="installFab" class="fab" hidden title="Install App">⬇️</div>
+
 <canvas id="canvas" width="1080" height="1080"></canvas>
 
 <script>
-/* ---------- FONT MAP ---------- */
+/* Fonts */
 const fonts={
   te:["Noto Sans Telugu"],
   ta:["Noto Sans Tamil"],
@@ -125,8 +147,8 @@ const fonts={
   en:["Arial"]
 };
 
-const imgInput=document.getElementById("imgInput");
-const imgPreview=document.getElementById("imgPreview");
+const imgInput=imgPreview=document.getElementById("imgInput");
+const imgPreviewEl=document.getElementById("imgPreview");
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 const nameInput=document.getElementById("nameInput");
@@ -134,7 +156,7 @@ const fontSelect=document.getElementById("fontSelect");
 const language=document.getElementById("language");
 const downloadBtn=document.getElementById("downloadBtn");
 
-/* ---------- LOAD FONTS ---------- */
+/* Load fonts */
 function loadFonts(){
   fontSelect.innerHTML="";
   fonts[language.value].forEach(f=>{
@@ -146,41 +168,40 @@ function loadFonts(){
 loadFonts();
 language.onchange=()=>{loadFonts();drawCanvas();};
 
-/* ---------- IMAGE UPLOAD ---------- */
+/* Image upload */
 imgInput.onchange=()=>{
   const f=imgInput.files[0];
   if(!f)return;
   const r=new FileReader();
   r.onload=()=>{
-    imgPreview.src=r.result;
+    imgPreviewEl.src=r.result;
     drawCanvas();
   };
   r.readAsDataURL(f);
 };
 
-/* ---------- LIVE UPDATE ---------- */
 [nameInput,fontSelect].forEach(el=>{
   el.addEventListener("input",drawCanvas);
 });
 
-/* ---------- DRAW CURVED TEXT ---------- */
-function drawCurvedText(ctx,text,cx,cy,radius,startAngle,font){
+/* Curved text */
+function drawCurvedText(text,font){
   if(!text)return;
   ctx.save();
   ctx.font=font;
   ctx.fillStyle="#fff";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.shadowColor="rgba(0,0,0,0.6)";
+  ctx.shadowColor="rgba(0,0,0,.6)";
   ctx.shadowBlur=4;
 
   const chars=text.split("");
+  const radius=460;
+  const start=Math.PI*0.85;
   const step=Math.PI/(chars.length+2);
 
   chars.forEach((ch,i)=>{
-    const a=startAngle+i*step;
+    const a=start+i*step;
     ctx.save();
-    ctx.translate(cx+radius*Math.cos(a),cy+radius*Math.sin(a));
+    ctx.translate(540+radius*Math.cos(a),540+radius*Math.sin(a));
     ctx.rotate(a+Math.PI/2);
     ctx.fillText(ch,0,0);
     ctx.restore();
@@ -188,9 +209,9 @@ function drawCurvedText(ctx,text,cx,cy,radius,startAngle,font){
   ctx.restore();
 }
 
-/* ---------- MAIN DRAW ---------- */
+/* Draw canvas */
 function drawCanvas(){
-  if(!imgPreview.src)return;
+  if(!imgPreviewEl.src)return;
 
   const img=new Image();
   img.onload=()=>{
@@ -200,25 +221,20 @@ function drawCanvas(){
     ctx.beginPath();
     ctx.arc(540,540,540,0,Math.PI*2);
     ctx.clip();
-
     ctx.drawImage(img,0,0,1080,1080);
     ctx.restore();
 
     drawCurvedText(
-      ctx,
       nameInput.value,
-      540,540,
-      460,
-      Math.PI*0.85,
       `700 64px ${fontSelect.value}`
     );
 
     downloadBtn.disabled=false;
   };
-  img.src=imgPreview.src;
+  img.src=imgPreviewEl.src;
 }
 
-/* ---------- DOWNLOAD ---------- */
+/* Download */
 downloadBtn.onclick=()=>{
   const a=document.createElement("a");
   a.download="aksharanama.png";
@@ -226,23 +242,23 @@ downloadBtn.onclick=()=>{
   a.click();
 };
 
-/* ---------- PWA INSTALL ---------- */
+/* PWA FAB */
 let deferredPrompt;
-const installBtn=document.getElementById("installBtn");
+const installFab=document.getElementById("installFab");
 
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();
   deferredPrompt=e;
-  installBtn.hidden=false;
+  installFab.hidden=false;
 });
 
-installBtn.onclick=async()=>{
+installFab.onclick=async()=>{
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
-  installBtn.hidden=true;
+  installFab.hidden=true;
 };
 
-/* ---------- SERVICE WORKER ---------- */
+/* Service Worker */
 if("serviceWorker"in navigator){
   navigator.serviceWorker.register("sw.js");
 }
