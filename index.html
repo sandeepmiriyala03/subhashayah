@@ -3,35 +3,47 @@
 <head>
 <meta charset="UTF-8" />
 <title>AksharaNama Pro – Privacy-First Designer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Chathura:wght@400;700&family=Ramaraja&family=Ponnala&family=Sree+Krushnadevaraya&family=Playfair+Display:wght@700&family=Merriweather:wght@700&family=Lora:wght@700&family=Roboto:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Chathura:wght@400;700&family=Ramaraja&family=Ponnala&family=Sree+Krushnadevaraya&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-  :root { --primary: #0066ff; --bg: #f0f4f8; --card: #ffffff; --highlight: #fff3cd; }
-  *{box-sizing:border-box; transition: all 0.2s ease;}
+  :root { --primary: #0066ff; --bg: #f0f4f8; --card: #ffffff; --highlight: #fff3cd; --success: #28a745; }
+  *{box-sizing:border-box; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+  
   body{
-    margin:0; font-family: 'Poppins', system-ui, sans-serif;
-    background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 15px;
+    margin:0; font-family: 'Poppins', sans-serif;
+    background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px;
+    min-height: 100vh;
   }
-  .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; }
-  header { text-align: center; display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px; }
-  header h1 { margin: 0; font-size: 20px; color: #1a1a1a; font-weight: 700; }
-  .help-trigger { background: #000; color: #fff; border-radius: 50%; width: 30px; height: 30px; border: none; cursor: pointer; font-weight: bold; }
-  .lang-header { background: var(--highlight); border: 2px solid #ffc107; padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 8px; }
-  .info-box { background: #eef4ff; border-left: 5px solid var(--primary); padding: 15px; border-radius: 12px; font-size: 14px; color: #334e81; line-height: 1.6; }
-  .preview-card { background: var(--card); padding: 15px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; }
-  .preview-wrapper { width: 250px; height: 250px; border-radius: 50%; background: #e0e0e0; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
-  .controls-grid { background: var(--card); padding: 20px; border-radius: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+  
+  .app-container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
+  header { text-align: center; display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 5px 0; }
+  header h1 { margin: 0; font-size: 1.2rem; color: #1a1a1a; }
+  .help-trigger { background: #000; color: #fff; border-radius: 50%; width: 32px; height: 32px; border: none; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+
+  .lang-header { background: var(--highlight); border: 2px solid #ffc107; padding: 12px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+  .info-box { background: #eef4ff; border-left: 5px solid var(--primary); padding: 12px; border-radius: 12px; font-size: 13px; color: #334e81; line-height: 1.5; }
+
+  .preview-card { background: var(--card); padding: 15px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; }
+  .preview-wrapper { width: min(70vw, 260px); height: min(70vw, 260px); border-radius: 50%; background: #e0e0e0; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+  canvas#pCanvas { width: 100% !important; height: 100% !important; }
+
+  .controls-grid { background: var(--card); padding: 15px; border-radius: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
   .control-group { display: flex; flex-direction: column; gap: 4px; }
   .full-width { grid-column: span 2; }
-  label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; }
-  input[type="text"], select, input[type="file"] { padding: 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; background: #fafafa; width: 100%; }
-  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-  button { padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
-  .btn-main { background: #28a745; color: white; }
+  label { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; }
+  input[type="text"], select, input[type="file"] { padding: 10px; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; background: #fafafa; width: 100%; }
+
+  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; }
+  button { padding: 14px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .btn-main { background: var(--success); color: white; width: 100%; }
   .btn-sec { background: #f0f0f0; color: #555; }
-  footer { margin-top: 20px; text-align: center; padding: 15px; color: #666; font-size: 13px; line-height: 1.5; }
+  .btn-wa { background: #25D366; color: white; grid-column: span 2; }
+
+  .fab-install { position: fixed; bottom: 20px; right: 20px; background: #000; color: #fff; border: none; border-radius: 30px; padding: 12px 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; align-items: center; gap: 8px; z-index: 1000; cursor: pointer; font-size: 14px; }
+
+  footer { margin-top: 15px; text-align: center; padding: 10px; color: #888; font-size: 12px; }
   #canvas { display: none; }
 </style>
 </head>
@@ -44,7 +56,7 @@
   </header>
 
   <div class="lang-header">
-    <label>🌐 Choose Language / భాషను ఎంచుకోండి</label>
+    <label>🌐 Language / భాష</label>
     <select id="lang" onchange="loadFonts()">
       <option value="te">Telugu (తెలుగు)</option>
       <option value="hi">Hindi (हिन्दी)</option>
@@ -58,44 +70,44 @@
     <div class="preview-wrapper">
       <canvas id="pCanvas" width="260" height="260"></canvas>
     </div>
-    <div class="control-group full-width" style="margin-top:15px; width: 100%;">
+    <div class="control-group full-width" style="margin-top:12px; width: 100%;">
         <label id="lblZoom">🔍 Zoom (జూమ్)</label>
-        <input type="range" id="imgZoom" min="1" max="3" step="0.05" value="1">
+        <input type="range" id="imgZoom" min="1" max="3" step="0.05" value="1" style="accent-color: var(--primary);">
     </div>
   </div>
 
   <div class="controls-grid">
     <div class="control-group full-width">
-      <label id="lblPhoto">1. 📸 Pick Photo (ఫోటో)</label>
+      <label id="lblPhoto">1. 📸 Photo (ఫోటో)</label>
       <input type="file" id="imgInput" accept="image/*">
     </div>
 
     <div class="control-group full-width">
-      <label id="lblName">2. ✍️ Your Name (మీ పేరు)</label>
-      <input type="text" id="nameInput" placeholder="పేరు రాయండి" value="పేరు">
+      <label id="lblName">2. ✍️ Name (పేరు)</label>
+      <input type="text" id="nameInput" placeholder="Enter name" value="పేరు">
     </div>
 
     <div class="control-group">
-      <label id="lblFont">Style (స్టైల్)</label>
+      <label id="lblFont">Style</label>
       <select id="fontSelect"></select>
     </div>
 
     <div class="control-group">
-        <label id="lblPos">Position (స్థానం)</label>
+        <label id="lblPos">Position</label>
         <select id="pos">
-          <option value="bottom">Bottom Curve</option>
-          <option value="top">Top Curve</option>
+          <option value="bottom">Bottom</option>
+          <option value="top">Top</option>
           <option value="center" selected>Center</option>
         </select>
     </div>
 
     <div class="control-group">
-      <label id="lblTxtColor">Text Color</label>
+      <label>🎨 Text</label>
       <input type="color" id="textColor" value="#ffffff">
     </div>
 
     <div class="control-group">
-      <label id="lblBorder">Border Color</label>
+      <label>🖼️ Border</label>
       <input type="color" id="borderColor" value="#0066ff">
     </div>
 
@@ -105,77 +117,93 @@
 
     <div class="btn-group full-width">
       <button class="btn-sec" onclick="location.reload()">Reset</button>
-      <button id="dlBtn" class="btn-main">✅ Download</button>
+      <button id="dlBtn" class="btn-main">💾 Download</button>
+      <button class="btn-wa" onclick="shareWA()">📲 Share on WhatsApp</button>
     </div>
   </div>
 
   <footer>
     <p>© 2026 Sandeep Miriyala — Yuktishala AI</p>
     <p>🔒 Privacy First Priority</p>
-    <p id="currentDateTime" style="font-weight: bold; color: #444;"></p>
+    <p id="currentDateTime" style="font-weight: 700; color: #444;"></p>
   </footer>
 </div>
+
+<button id="installFab" class="fab-install">📲 Install App</button>
 
 <canvas id="canvas" width="1080" height="1080"></canvas>
 
 <script>
+// 1. THIS HELPER MUST BE AT THE TOP
+const el = (id) => document.getElementById(id);
+
+// 2. NOW WE CAN GET ELEMENTS
+const installFab = el('installFab');
+const canvas = el('canvas'), ctx = canvas.getContext('2d');
+const pCanvas = el('pCanvas'), pctx = pCanvas.getContext('2d');
+let userImg = null;
+let deferredPrompt;
+
+// 3. APP LOGIC
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installFab.style.display = 'flex';
+});
+
+installFab.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') installFab.style.display = 'none';
+        deferredPrompt = null;
+    }
+});
+
 const fontMap = {
   te: ["Noto Sans Telugu", "Ramabhadra", "Gidugu", "Mandali", "NTR", "RaviPrakash", "Tenali Ramakrishna", "Timmana", "Chathura", "Ramaraja", "Ponnala", "Sree Krushnadevaraya"],
-  en: ["Poppins", "Roboto", "Playfair Display", "Merriweather", "Lora", "Arial"],
-  hi: ["Noto Sans Devanagari", "Tiro Devanagari Sanskrit", "Hind"]
+  en: ["Poppins", "Arial", "Roboto"],
+  hi: ["Noto Sans Devanagari", "Hind"]
 };
 
 const translations = {
   te: {
-    guide: "<strong>🚀 సులభమైన స్టెప్స్:</strong><ol><li><b>ఫోటో</b> ఎంచుకోండి.</li><li>ముఖాన్ని మధ్యలోకి <b>Zoom</b> చేయండి.</li><li>మీ <b>పేరు</b> రాయండి.</li><li><b>Download</b> నొక్కండి.</li></ol>",
-    lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి", lblName: "2. ✍️ మీ పేరు రాయండి", lblZoom: "🔍 జూమ్ అడ్జస్ట్ చేయండి",
-    lblFont: "అక్షరాల స్టైల్", lblPos: "పేరు ఎక్కడ ఉండాలి?", lblTxtColor: "అక్షరాల రంగు", lblBorder: "బార్డర్ రంగు"
+    guide: "<strong>🚀 3 స్టెప్స్:</strong><ol><li><b>Photo</b> సెలెక్ట్ చేయండి.</li><li>పేరు <b>Type</b> చేయండి.</li><li><b>Download</b> నొక్కండి.</li></ol>",
+    lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి", 
+    lblName: "2. ✍️ మీ పేరు రాయండి", 
+    lblZoom: "🔍 జూమ్"
   },
   hi: {
-    guide: "<strong>🚀 आसान स्टेप्स:</strong><ol><li><b>Photo</b> चुनें।</li><li>चेहरे को सेट करने के लिए <b>Zoom</b> करें।</li><li>अपना <b>नाम</b> लिखें।</li><li><b>Download</b> करें।</li></ol>",
-    lblPhoto: "1. 📸 फोटो चुनें", lblName: "2. ✍️ अपना नाम लिखें", lblZoom: "🔍 ज़ूम सेट करें",
-    lblFont: "लिखने का स्टाइल", lblPos: "नाम कहाँ रखें?", lblTxtColor: "नाम का रंग", lblBorder: "बॉर्डर का रंग"
+    guide: "<strong>🚀 3 आसान स्टेप्स:</strong><ol><li><b>Photo</b> चुनें।</li><li>अपना <b>Name</b> लिखें।</li><li><b>Download</b> बटन दबाएं।</li></ol>",
+    lblPhoto: "1. 📸 फोटो चुनें", 
+    lblName: "2. ✍️ अपना नाम लिखें", 
+    lblZoom: "🔍 ज़ूम"
   },
   en: {
-    guide: "<strong>🚀 Easy Steps:</strong><ol><li>Click <b>Pick Photo</b>.</li><li>Use <b>Zoom</b> to center face.</li><li>Type your <b>Name</b>.</li><li>Click <b>Download</b>.</li></ol>",
-    lblPhoto: "1. 📸 Pick Photo", lblName: "2. ✍️ Your Name", lblZoom: "🔍 Image Zoom",
-    lblFont: "Font Style", lblPos: "Text Position", lblTxtColor: "Text Color", lblBorder: "Border Color"
+    guide: "<strong>🚀 3 Steps:</strong><ol><li>Select <b>Photo</b>.</li><li>Type <b>Name</b>.</li><li>Click <b>Download</b>.</li></ol>",
+    lblPhoto: "1. 📸 Pick Photo", 
+    lblName: "2. ✍️ Type Name", 
+    lblZoom: "🔍 Zoom"
   }
 };
 
-const el = (id) => document.getElementById(id);
-const canvas = el('canvas'), ctx = canvas.getContext('2d');
-const pCanvas = el('pCanvas'), pctx = pCanvas.getContext('2d');
-let userImg = null;
-
 function loadFonts() {
-  const selectedLang = el('lang').value;
+  const lang = el('lang').value;
   const sel = el('fontSelect');
   sel.innerHTML = "";
-  fontMap[selectedLang].forEach(f => {
-    const o = document.createElement("option");
-    o.value = f; o.textContent = f;
-    sel.appendChild(o);
+  fontMap[lang].forEach(f => {
+    const o = document.createElement("option"); o.value = f; o.textContent = f; sel.appendChild(o);
   });
-
-  const langData = translations[selectedLang];
-  el('helpBox').innerHTML = langData.guide;
-  el('lblPhoto').textContent = langData.lblPhoto;
-  el('lblName').textContent = langData.lblName;
-  el('lblZoom').textContent = langData.lblZoom;
-  el('lblFont').textContent = langData.lblFont;
-  el('lblPos').textContent = langData.lblPos;
-  el('lblTxtColor').textContent = langData.lblTxtColor;
-  el('lblBorder').textContent = langData.lblBorder;
-
-  // Wait for fonts to load before drawing
-  document.fonts.ready.then(() => { draw(); });
+  const data = translations[lang] || translations['en'];
+  el('helpBox').innerHTML = data.guide;
+  el('lblPhoto').textContent = data.lblPhoto;
+  el('lblName').textContent = data.lblName;
+  document.fonts.ready.then(draw);
 }
 
 function updateFooter() {
     const now = new Date();
-    const formattedDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    el('currentDateTime').textContent = formattedDate;
+    el('currentDateTime').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 window.onload = () => { updateFooter(); loadFonts(); };
@@ -187,17 +215,17 @@ function toggleHelp() {
 
 el('imgInput').onchange = (e) => {
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = (ev) => {
         userImg = new Image();
         userImg.onload = draw;
-        userImg.src = event.target.result;
+        userImg.src = ev.target.result;
     };
     if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
 };
 
-function drawCurved(context, text, cx, cy, radius, startAngle, fSize, font, weight) {
+function drawCurved(context, text, cx, cy, radius, startAngle, fSize, font) {
     if (!text) return;
-    context.font = `${weight} ${fSize}px "${font}"`;
+    context.font = `bold ${fSize}px "${font}"`;
     const chars = text.split("");
     const totalWidth = context.measureText(text).width;
     const angularWidth = totalWidth / radius;
@@ -216,13 +244,11 @@ function drawCurved(context, text, cx, cy, radius, startAngle, fSize, font, weig
 
 function draw() {
     [ {c:ctx, s:1080}, {c:pctx, s:260} ].forEach(canv => {
-        const c = canv.c;
-        const scale = canv.s / 1080;
-        const mid = canv.s / 2;
+        const c = canv.c, scale = canv.s / 1080, mid = canv.s / 2;
         const zoom = parseFloat(el('imgZoom').value);
 
         c.clearRect(0,0,canv.s,canv.s);
-        const bSize = parseInt(el('borderSize').value) * scale * 2;
+        const bSize = 24 * scale;
         c.fillStyle = el('borderColor').value;
         c.beginPath(); c.arc(mid, mid, mid, 0, Math.PI*2); c.fill();
 
@@ -231,37 +257,38 @@ function draw() {
         
         if (userImg) {
             const min = Math.min(userImg.width, userImg.height);
-            const drawSize = canv.s * zoom;
-            const offset = (drawSize - canv.s) / 2;
-            c.drawImage(userImg, (userImg.width-min)/2, (userImg.height-min)/2, min, min, -offset, -offset, drawSize, drawSize);
+            const dSize = canv.s * zoom;
+            const off = (dSize - canv.s) / 2;
+            c.drawImage(userImg, (userImg.width-min)/2, (userImg.height-min)/2, min, min, -off, -off, dSize, dSize);
         } else {
-            c.fillStyle = "#f5f5f5"; c.fillRect(0,0,canv.s,canv.s);
-            c.fillStyle = "#bbb"; c.font = `${20*scale}px sans-serif`; c.textAlign = "center";
-            c.fillText("PICK PHOTO", mid, mid);
+            c.fillStyle = "#eee"; c.fillRect(0,0,canv.s,canv.s);
         }
         c.restore();
 
         c.fillStyle = el('textColor').value;
-        c.shadowColor = "rgba(0,0,0,0.8)";
-        c.shadowBlur = 10 * scale;
+        c.shadowColor = "rgba(0,0,0,0.6)";
+        c.shadowBlur = 8 * scale;
         c.textAlign = "center";
-        c.textBaseline = "middle"; // Helps align Telugu characters properly
+        c.textBaseline = "middle";
 
         const text = el('nameInput').value;
-        const fontSize = parseInt(el('fSize').value) * scale;
+        const fontSize = 70 * scale;
         const font = el('fontSelect').value;
-        const weight = el('fontWeight').value;
         const pos = el('pos').value;
 
         if (pos === 'bottom') {
-            drawCurved(c, text, mid, mid, mid - (bSize + 65*scale), Math.PI/2, fontSize, font, weight);
+            drawCurved(c, text, mid, mid, mid - (bSize + 50*scale), Math.PI/2, fontSize, font);
         } else if (pos === 'top') {
-            drawCurved(c, text, mid, mid, mid - (bSize + 65*scale), -Math.PI/2, fontSize, font, weight);
+            drawCurved(c, text, mid, mid, mid - (bSize + 50*scale), -Math.PI/2, fontSize, font);
         } else {
-            c.font = `${weight} ${fontSize}px "${font}"`;
+            c.font = `bold ${fontSize}px "${font}"`;
             c.fillText(text, mid, mid);
         }
     });
+}
+
+function shareWA() {
+    alert("Download the image first, then attach it to your WhatsApp status!");
 }
 
 ['nameInput', 'textColor', 'borderColor', 'pos', 'imgZoom', 'fontSelect'].forEach(id => {
@@ -269,9 +296,9 @@ function draw() {
 });
 
 el('dlBtn').onclick = () => {
-    if(!userImg) return alert("Please upload a photo first!");
+    if(!userImg) return alert("Pick a photo!");
     const link = document.createElement('a');
-    link.download = 'aksharanama_badge.png';
+    link.download = 'my_badge.png';
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
 };
