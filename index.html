@@ -10,10 +10,12 @@
 
 <link rel="manifest" href="manifest.json">
 
-<!-- Google Fonts -->
+<!-- Google Fonts (Indian Languages) -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:system-ui,sans-serif;
@@ -25,8 +27,58 @@ body{
   gap:12px;
 }
 
-h1{margin:4px 0;font-size:20px}
+/* HEADER */
+header{
+  width:100%;
+  max-width:480px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+header img{
+  width:40px;
+  height:40px;
+  border-radius:8px;
+}
+
+header h1{
+  font-size:18px;
+  margin:0;
+}
+
 small{color:#555}
+
+/* HOW TO */
+.howto{
+  width:100%;
+  max-width:260px;
+  background:#fff;
+  border:1px solid #e0e0e0;
+  border-radius:8px;
+  padding:10px;
+  font-size:13px;
+}
+
+.howto h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+}
+
+.howto ol{
+  padding-left:18px;
+  margin:0;
+}
+
+.howto li{margin-bottom:4px}
+
+/* CONTROLS */
+.controls{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:center;
+}
 
 label{
   font-size:13px;
@@ -52,6 +104,7 @@ button{
 
 button:disabled{opacity:.5}
 
+/* PREVIEW */
 .preview{
   width:260px;
   height:260px;
@@ -67,14 +120,7 @@ button:disabled{opacity:.5}
   object-fit:cover;
 }
 
-.controls{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:center;
-}
-
-/* FAB Install Button */
+/* FAB INSTALL */
 .fab{
   position:fixed;
   bottom:16px;
@@ -99,9 +145,26 @@ canvas{display:none}
 
 <body>
 
-<h1>AksharaNama</h1>
+<!-- HEADER -->
+<header>
+  <img src="logo.png" alt="AksharaNama Logo">
+  <h1>AksharaNama</h1>
+</header>
 <small>Privacy-first • No data stored</small>
 
+<!-- HOW TO -->
+<div class="howto">
+  <h3>How to use</h3>
+  <ol>
+    <li>Upload your photo</li>
+    <li>Select language & font</li>
+    <li>Type your name</li>
+    <li>Live preview updates</li>
+    <li>Download image</li>
+  </ol>
+</div>
+
+<!-- CONTROLS -->
 <div class="controls">
 
 <label for="imgInput">Upload Image</label>
@@ -127,17 +190,18 @@ canvas{display:none}
 
 </div>
 
+<!-- PREVIEW -->
 <div class="preview">
   <img id="imgPreview">
 </div>
 
-<!-- FAB -->
+<!-- INSTALL FAB -->
 <div id="installFab" class="fab" hidden title="Install App">⬇️</div>
 
 <canvas id="canvas" width="1080" height="1080"></canvas>
 
 <script>
-/* Fonts */
+/* FONT MAP */
 const fonts={
   te:["Noto Sans Telugu"],
   ta:["Noto Sans Tamil"],
@@ -147,8 +211,8 @@ const fonts={
   en:["Arial"]
 };
 
-const imgInput=imgPreview=document.getElementById("imgInput");
-const imgPreviewEl=document.getElementById("imgPreview");
+const imgInput=document.getElementById("imgInput");
+const imgPreview=document.getElementById("imgPreview");
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 const nameInput=document.getElementById("nameInput");
@@ -156,7 +220,7 @@ const fontSelect=document.getElementById("fontSelect");
 const language=document.getElementById("language");
 const downloadBtn=document.getElementById("downloadBtn");
 
-/* Load fonts */
+/* LOAD FONTS */
 function loadFonts(){
   fontSelect.innerHTML="";
   fonts[language.value].forEach(f=>{
@@ -168,23 +232,24 @@ function loadFonts(){
 loadFonts();
 language.onchange=()=>{loadFonts();drawCanvas();};
 
-/* Image upload */
+/* IMAGE UPLOAD */
 imgInput.onchange=()=>{
   const f=imgInput.files[0];
   if(!f)return;
   const r=new FileReader();
   r.onload=()=>{
-    imgPreviewEl.src=r.result;
+    imgPreview.src=r.result;
     drawCanvas();
   };
   r.readAsDataURL(f);
 };
 
+/* LIVE UPDATE */
 [nameInput,fontSelect].forEach(el=>{
   el.addEventListener("input",drawCanvas);
 });
 
-/* Curved text */
+/* CURVED TEXT */
 function drawCurvedText(text,font){
   if(!text)return;
   ctx.save();
@@ -209,14 +274,12 @@ function drawCurvedText(text,font){
   ctx.restore();
 }
 
-/* Draw canvas */
+/* DRAW */
 function drawCanvas(){
-  if(!imgPreviewEl.src)return;
-
+  if(!imgPreview.src)return;
   const img=new Image();
   img.onload=()=>{
     ctx.clearRect(0,0,1080,1080);
-
     ctx.save();
     ctx.beginPath();
     ctx.arc(540,540,540,0,Math.PI*2);
@@ -231,10 +294,10 @@ function drawCanvas(){
 
     downloadBtn.disabled=false;
   };
-  img.src=imgPreviewEl.src;
+  img.src=imgPreview.src;
 }
 
-/* Download */
+/* DOWNLOAD */
 downloadBtn.onclick=()=>{
   const a=document.createElement("a");
   a.download="aksharanama.png";
@@ -242,7 +305,7 @@ downloadBtn.onclick=()=>{
   a.click();
 };
 
-/* PWA FAB */
+/* PWA INSTALL */
 let deferredPrompt;
 const installFab=document.getElementById("installFab");
 
@@ -258,7 +321,7 @@ installFab.onclick=async()=>{
   installFab.hidden=true;
 };
 
-/* Service Worker */
+/* SERVICE WORKER */
 if("serviceWorker"in navigator){
   navigator.serviceWorker.register("sw.js");
 }
