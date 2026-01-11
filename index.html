@@ -14,60 +14,24 @@
     margin:0; font-family: 'Poppins', system-ui, sans-serif;
     background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 15px;
   }
-  
   .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; }
-  
   header { text-align: center; display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px; }
   header h1 { margin: 0; font-size: 20px; color: #1a1a1a; font-weight: 700; }
   .help-trigger { background: #000; color: #fff; border-radius: 50%; width: 30px; height: 30px; border: none; cursor: pointer; font-weight: bold; }
-
-  .lang-header {
-    background: var(--highlight); border: 2px solid #ffc107; padding: 15px; border-radius: 15px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-
-  .info-box {
-    background: #eef4ff; border-left: 5px solid var(--primary); padding: 15px;
-    border-radius: 12px; font-size: 14px; color: #334e81; line-height: 1.6;
-  }
-
-  .preview-card {
-    background: var(--card); padding: 15px; border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center;
-  }
-  
-  .preview-wrapper {
-    width: 250px; height: 250px; border-radius: 50%;
-    background: #e0e0e0; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    overflow: hidden; position: relative;
-  }
-
-  .controls-grid {
-    background: var(--card); padding: 20px; border-radius: 24px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  }
-
+  .lang-header { background: var(--highlight); border: 2px solid #ffc107; padding: 15px; border-radius: 15px; display: flex; flex-direction: column; gap: 8px; }
+  .info-box { background: #eef4ff; border-left: 5px solid var(--primary); padding: 15px; border-radius: 12px; font-size: 14px; color: #334e81; line-height: 1.6; }
+  .preview-card { background: var(--card); padding: 15px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; }
+  .preview-wrapper { width: 250px; height: 250px; border-radius: 50%; background: #e0e0e0; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+  .controls-grid { background: var(--card); padding: 20px; border-radius: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
   .control-group { display: flex; flex-direction: column; gap: 4px; }
   .full-width { grid-column: span 2; }
-
   label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; }
-  input[type="text"], select, input[type="file"] {
-    padding: 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; background: #fafafa; width: 100%;
-  }
-
+  input[type="text"], select, input[type="file"] { padding: 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; background: #fafafa; width: 100%; }
   .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   button { padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
   .btn-main { background: #28a745; color: white; }
   .btn-sec { background: #f0f0f0; color: #555; }
-
   footer { margin-top: 20px; text-align: center; padding: 15px; color: #666; font-size: 13px; line-height: 1.5; }
-
-  .fab-install {
-    position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
-    background: #000; color: #fff; display: none; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; z-index: 100; font-size: 24px; border: none;
-  }
-
   #canvas { display: none; }
 </style>
 </head>
@@ -108,7 +72,7 @@
 
     <div class="control-group full-width">
       <label id="lblName">2. ✍️ Your Name (మీ పేరు)</label>
-      <input type="text" id="nameInput" placeholder="..." value="NAME">
+      <input type="text" id="nameInput" placeholder="పేరు రాయండి" value="పేరు">
     </div>
 
     <div class="control-group">
@@ -121,7 +85,7 @@
         <select id="pos">
           <option value="bottom">Bottom Curve</option>
           <option value="top">Top Curve</option>
-          <option value="center">Center</option>
+          <option value="center" selected>Center</option>
         </select>
     </div>
 
@@ -146,13 +110,12 @@
   </div>
 
   <footer>
-    <p style="margin: 2px 0;">© 2026 Sandeep Miriyala — Yuktishala AI</p>
-    <p style="margin: 2px 0;">🔒 Privacy First Priority</p>
-    <p id="currentDateTime" style="font-weight: bold; color: #444; margin: 5px 0;"></p>
+    <p>© 2026 Sandeep Miriyala — Yuktishala AI</p>
+    <p>🔒 Privacy First Priority</p>
+    <p id="currentDateTime" style="font-weight: bold; color: #444;"></p>
   </footer>
 </div>
 
-<button id="installFab" class="fab-install">📲</button>
 <canvas id="canvas" width="1080" height="1080"></canvas>
 
 <script>
@@ -164,55 +127,31 @@ const fontMap = {
 
 const translations = {
   te: {
-    guide: "<strong>🚀 సులభమైన స్టెప్స్:</strong><ol><li><b>ఫోటో ఎంచుకోండి</b> పై క్లిక్ చేయండి.</li><li>మీ ముఖం కనిపించేలా <b>Zoom</b> జరపండి.</li><li>మీ <b>పేరు</b> టైప్ చేయండి.</li><li><b>Download</b> బటన్ నొక్కండి.</li></ol>",
-    lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి",
-    lblName: "2. ✍️ మీ పేరు టైప్ చేయండి",
-    lblZoom: "🔍 జూమ్ అడ్జస్ట్ చేయండి",
-    lblFont: "అక్షరాల స్టైల్",
-    lblPos: "పేరు ఎక్కడ ఉండాలి?",
-    lblTxtColor: "అక్షరాల రంగు",
-    lblBorder: "బార్డర్ రంగు"
+    guide: "<strong>🚀 సులభమైన స్టెప్స్:</strong><ol><li><b>ఫోటో</b> ఎంచుకోండి.</li><li>ముఖాన్ని మధ్యలోకి <b>Zoom</b> చేయండి.</li><li>మీ <b>పేరు</b> రాయండి.</li><li><b>Download</b> నొక్కండి.</li></ol>",
+    lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి", lblName: "2. ✍️ మీ పేరు రాయండి", lblZoom: "🔍 జూమ్ అడ్జస్ట్ చేయండి",
+    lblFont: "అక్షరాల స్టైల్", lblPos: "పేరు ఎక్కడ ఉండాలి?", lblTxtColor: "అక్షరాల రంగు", lblBorder: "బార్డర్ రంగు"
   },
   hi: {
-    guide: "<strong>🚀 आसान स्टेप्स:</strong><ol><li><b>Pick Photo</b> पर क्लिक करें।</li><li>चेहरे को सेट करने के लिए <b>Zoom</b> करें।</li><li>अपना <b>नाम</b> लिखें।</li><li><b>Download</b> बटन दबाएं।</li></ol>",
-    lblPhoto: "1. 📸 फोटो चुनें",
-    lblName: "2. ✍️ अपना नाम लिखें",
-    lblZoom: "🔍 ज़ूम सेट करें",
-    lblFont: "लिखने का स्टाइल",
-    lblPos: "नाम कहाँ रखें?",
-    lblTxtColor: "नाम का रंग",
-    lblBorder: "बॉर्डर का रंग"
+    guide: "<strong>🚀 आसान स्टेप्स:</strong><ol><li><b>Photo</b> चुनें।</li><li>चेहरे को सेट करने के लिए <b>Zoom</b> करें।</li><li>अपना <b>नाम</b> लिखें।</li><li><b>Download</b> करें।</li></ol>",
+    lblPhoto: "1. 📸 फोटो चुनें", lblName: "2. ✍️ अपना नाम लिखें", lblZoom: "🔍 ज़ूम सेट करें",
+    lblFont: "लिखने का स्टाइल", lblPos: "नाम कहाँ रखें?", lblTxtColor: "नाम का रंग", lblBorder: "बॉर्डर का रंग"
   },
   en: {
-    guide: "<strong>🚀 Easy Steps:</strong><ol><li>Click <b>Pick Photo</b> to upload.</li><li>Use <b>Zoom</b> to center your face.</li><li>Type your <b>Name</b>.</li><li>Click <b>Download Badge</b>.</li></ol>",
-    lblPhoto: "1. 📸 Pick Photo",
-    lblName: "2. ✍️ Your Name",
-    lblZoom: "🔍 Image Zoom",
-    lblFont: "Font Style",
-    lblPos: "Text Position",
-    lblTxtColor: "Text Color",
-    lblBorder: "Border Color"
+    guide: "<strong>🚀 Easy Steps:</strong><ol><li>Click <b>Pick Photo</b>.</li><li>Use <b>Zoom</b> to center face.</li><li>Type your <b>Name</b>.</li><li>Click <b>Download</b>.</li></ol>",
+    lblPhoto: "1. 📸 Pick Photo", lblName: "2. ✍️ Your Name", lblZoom: "🔍 Image Zoom",
+    lblFont: "Font Style", lblPos: "Text Position", lblTxtColor: "Text Color", lblBorder: "Border Color"
   }
 };
 
 const el = (id) => document.getElementById(id);
 const canvas = el('canvas'), ctx = canvas.getContext('2d');
 const pCanvas = el('pCanvas'), pctx = pCanvas.getContext('2d');
-
 let userImg = null;
-
-function updateFooter() {
-    const now = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = now.toLocaleDateString('en-US', options);
-    el('currentDateTime').textContent = formattedDate;
-}
 
 function loadFonts() {
   const selectedLang = el('lang').value;
   const sel = el('fontSelect');
   sel.innerHTML = "";
-  
   fontMap[selectedLang].forEach(f => {
     const o = document.createElement("option");
     o.value = f; o.textContent = f;
@@ -229,13 +168,17 @@ function loadFonts() {
   el('lblTxtColor').textContent = langData.lblTxtColor;
   el('lblBorder').textContent = langData.lblBorder;
 
-  draw();
+  // Wait for fonts to load before drawing
+  document.fonts.ready.then(() => { draw(); });
 }
 
-window.onload = () => { 
-  loadFonts(); 
-  updateFooter();
-};
+function updateFooter() {
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    el('currentDateTime').textContent = formattedDate;
+}
+
+window.onload = () => { updateFooter(); loadFonts(); };
 
 function toggleHelp() {
   const box = el('helpBox');
@@ -279,24 +222,18 @@ function draw() {
         const zoom = parseFloat(el('imgZoom').value);
 
         c.clearRect(0,0,canv.s,canv.s);
-
         const bSize = parseInt(el('borderSize').value) * scale * 2;
         c.fillStyle = el('borderColor').value;
-        c.beginPath();
-        c.arc(mid, mid, mid, 0, Math.PI*2);
-        c.fill();
+        c.beginPath(); c.arc(mid, mid, mid, 0, Math.PI*2); c.fill();
 
         c.save();
-        c.beginPath();
-        c.arc(mid, mid, mid - bSize, 0, Math.PI*2);
-        c.clip();
+        c.beginPath(); c.arc(mid, mid, mid - bSize, 0, Math.PI*2); c.clip();
         
         if (userImg) {
-            const iw = userImg.width, ih = userImg.height;
-            const min = Math.min(iw, ih);
+            const min = Math.min(userImg.width, userImg.height);
             const drawSize = canv.s * zoom;
             const offset = (drawSize - canv.s) / 2;
-            c.drawImage(userImg, (iw-min)/2, (ih-min)/2, min, min, -offset, -offset, drawSize, drawSize);
+            c.drawImage(userImg, (userImg.width-min)/2, (userImg.height-min)/2, min, min, -offset, -offset, drawSize, drawSize);
         } else {
             c.fillStyle = "#f5f5f5"; c.fillRect(0,0,canv.s,canv.s);
             c.fillStyle = "#bbb"; c.font = `${20*scale}px sans-serif`; c.textAlign = "center";
@@ -306,9 +243,9 @@ function draw() {
 
         c.fillStyle = el('textColor').value;
         c.shadowColor = "rgba(0,0,0,0.8)";
-        c.shadowBlur = 12 * scale;
+        c.shadowBlur = 10 * scale;
         c.textAlign = "center";
-        c.textBaseline = "middle";
+        c.textBaseline = "middle"; // Helps align Telugu characters properly
 
         const text = el('nameInput').value;
         const fontSize = parseInt(el('fSize').value) * scale;
@@ -317,9 +254,9 @@ function draw() {
         const pos = el('pos').value;
 
         if (pos === 'bottom') {
-            drawCurved(c, text, mid, mid, mid - (bSize + 55*scale), Math.PI/2, fontSize, font, weight);
+            drawCurved(c, text, mid, mid, mid - (bSize + 65*scale), Math.PI/2, fontSize, font, weight);
         } else if (pos === 'top') {
-            drawCurved(c, text, mid, mid, mid - (bSize + 55*scale), -Math.PI/2, fontSize, font, weight);
+            drawCurved(c, text, mid, mid, mid - (bSize + 65*scale), -Math.PI/2, fontSize, font, weight);
         } else {
             c.font = `${weight} ${fontSize}px "${font}"`;
             c.fillText(text, mid, mid);
@@ -334,7 +271,7 @@ function draw() {
 el('dlBtn').onclick = () => {
     if(!userImg) return alert("Please upload a photo first!");
     const link = document.createElement('a');
-    link.download = 'badge.png';
+    link.download = 'aksharanama_badge.png';
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
 };
