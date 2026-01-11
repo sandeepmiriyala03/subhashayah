@@ -171,35 +171,46 @@ const translations = {
     guide: "<strong>🚀 3 స్టెప్స్:</strong><ol><li><b>Photo</b> సెలెక్ట్ చేయండి.</li><li>పేరు <b>Type</b> చేయండి.</li><li><b>Download</b> నొక్కండి.</li></ol>",
     lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి", 
     lblName: "2. ✍️ మీ పేరు రాయండి", 
-    lblZoom: "🔍 జూమ్"
+    lblZoom: "🔍 జూమ్",
+    lblFont: "స్టైల్", lblPos: "స్థానం"
   },
   hi: {
     guide: "<strong>🚀 3 आसान स्टेप्स:</strong><ol><li><b>Photo</b> चुनें।</li><li>अपना <b>Name</b> लिखें।</li><li><b>Download</b> बटन दबाएं।</li></ol>",
     lblPhoto: "1. 📸 फोटो चुनें", 
     lblName: "2. ✍️ अपना नाम लिखें", 
-    lblZoom: "🔍 ज़ूम"
+    lblZoom: "🔍 ज़ूम",
+    lblFont: "स्टाइल", lblPos: "स्थान"
   },
   en: {
     guide: "<strong>🚀 3 Steps:</strong><ol><li>Select <b>Photo</b>.</li><li>Type <b>Name</b>.</li><li>Click <b>Download</b>.</li></ol>",
     lblPhoto: "1. 📸 Pick Photo", 
     lblName: "2. ✍️ Type Name", 
-    lblZoom: "🔍 Zoom"
+    lblZoom: "🔍 Zoom",
+    lblFont: "Style", lblPos: "Position"
   }
 };
-
-
 
 function loadFonts() {
   const lang = el('lang').value;
   const sel = el('fontSelect');
   sel.innerHTML = "";
+  
   fontMap[lang].forEach(f => {
-    const o = document.createElement("option"); o.value = f; o.textContent = f; sel.appendChild(o);
+    const o = document.createElement("option"); 
+    o.value = f; o.textContent = f; 
+    sel.appendChild(o);
   });
+
   const data = translations[lang] || translations['en'];
+  
+  // Update all labels safely
   el('helpBox').innerHTML = data.guide;
   el('lblPhoto').textContent = data.lblPhoto;
   el('lblName').textContent = data.lblName;
+  el('lblZoom').textContent = data.lblZoom;
+  el('lblFont').textContent = data.lblFont;
+  el('lblPos').textContent = data.lblPos;
+
   document.fonts.ready.then(draw);
 }
 
@@ -304,6 +315,14 @@ el('dlBtn').onclick = () => {
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
 };
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered!', reg))
+        .catch(err => console.log('Service Worker Failed!', err));
+    });
+  }
 </script>
 </body>
 </html>
