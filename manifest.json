@@ -3,7 +3,7 @@
   "name": "AksharaNama Pro Designer",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/1043/1043431.png",
+      "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
