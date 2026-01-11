@@ -8,31 +8,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Ramabhadra&family=Gidugu&family=Mandali&family=NTR&family=RaviPrakash&family=Tenali+Ramakrishna&family=Timmana&family=Chathura:wght@400;700&family=Ramaraja&family=Ponnala&family=Sree+Krushnadevaraya&family=Playfair+Display:wght@700&family=Merriweather:wght@700&family=Lora:wght@700&family=Roboto:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Tiro+Devanagari+Sanskrit&family=Hind:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-  :root { --primary: #0066ff; --bg: #f0f4f8; --card: #ffffff; }
+  :root { --primary: #0066ff; --bg: #f0f4f8; --card: #ffffff; --highlight: #fff3cd; }
   *{box-sizing:border-box; transition: all 0.2s ease;}
   body{
     margin:0; font-family: 'Poppins', system-ui, sans-serif;
-    background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 20px;
+    background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 15px;
   }
   
-  .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; }
+  .app-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; }
   
-  header { text-align: center; display: flex; justify-content: space-between; align-items: center; width: 100%; }
-  header h1 { margin: 0; font-size: 22px; color: #1a1a1a; font-weight: 700; }
-  .help-trigger { background: #000; color: #fff; border-radius: 50%; width: 28px; height: 28px; border: none; cursor: pointer; font-weight: bold; }
+  header { text-align: center; display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px; }
+  header h1 { margin: 0; font-size: 20px; color: #1a1a1a; font-weight: 700; }
+  .help-trigger { background: #000; color: #fff; border-radius: 50%; width: 30px; height: 30px; border: none; cursor: pointer; font-weight: bold; }
+
+  .lang-header {
+    background: var(--highlight); border: 2px solid #ffc107; padding: 15px; border-radius: 15px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
 
   .info-box {
-    background: #eef4ff; border-left: 4px solid var(--primary); padding: 15px;
-    border-radius: 12px; font-size: 13px; color: #334e81; line-height: 1.4;
+    background: #eef4ff; border-left: 5px solid var(--primary); padding: 15px;
+    border-radius: 12px; font-size: 14px; color: #334e81; line-height: 1.6;
   }
 
   .preview-card {
-    background: var(--card); padding: 20px; border-radius: 24px;
+    background: var(--card); padding: 15px; border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center;
   }
   
   .preview-wrapper {
-    width: 260px; height: 260px; border-radius: 50%;
+    width: 250px; height: 250px; border-radius: 50%;
     background: #e0e0e0; border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     overflow: hidden; position: relative;
   }
@@ -45,15 +50,17 @@
   .control-group { display: flex; flex-direction: column; gap: 4px; }
   .full-width { grid-column: span 2; }
 
-  label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; }
+  label { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; }
   input[type="text"], select, input[type="file"] {
-    padding: 10px; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; background: #fafafa;
+    padding: 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 15px; background: #fafafa; width: 100%;
   }
 
-  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
-  button { padding: 14px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; }
-  .btn-main { background: var(--primary); color: white; }
+  .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  button { padding: 16px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 16px; }
+  .btn-main { background: #28a745; color: white; }
   .btn-sec { background: #f0f0f0; color: #555; }
+
+  footer { margin-top: 20px; text-align: center; padding: 15px; color: #666; font-size: 13px; line-height: 1.5; }
 
   .fab-install {
     position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
@@ -72,53 +79,45 @@
     <button class="help-trigger" onclick="toggleHelp()">?</button>
   </header>
 
-  <div class="info-box" id="helpBox">
-    <strong>🚀 Quick Guide:</strong>
-    <ol style="margin:5px 0 0 18px; padding:0;">
-      <li>Click <b>Pick Photo</b> to upload.</li>
-      <li>Use <b>Zoom Slider</b> to center your face.</li>
-      <li>Pick <b>Language & Font</b> (Telugu/Hindi/English).</li>
-      <li>Choose colors and click <b>Download Badge</b>.</li>
-    </ol>
+  <div class="lang-header">
+    <label>🌐 Choose Language / భాషను ఎంచుకోండి</label>
+    <select id="lang" onchange="loadFonts()">
+      <option value="te">Telugu (తెలుగు)</option>
+      <option value="hi">Hindi (हिन्दी)</option>
+      <option value="en">English</option>
+    </select>
   </div>
+
+  <div class="info-box" id="helpBox"></div>
 
   <div class="preview-card">
     <div class="preview-wrapper">
       <canvas id="pCanvas" width="260" height="260"></canvas>
     </div>
     <div class="control-group full-width" style="margin-top:15px; width: 100%;">
-        <label>🔍 Image Zoom</label>
+        <label id="lblZoom">🔍 Zoom (జూమ్)</label>
         <input type="range" id="imgZoom" min="1" max="3" step="0.05" value="1">
     </div>
   </div>
 
   <div class="controls-grid">
     <div class="control-group full-width">
-      <label>1. Pick Photo</label>
+      <label id="lblPhoto">1. 📸 Pick Photo (ఫోటో)</label>
       <input type="file" id="imgInput" accept="image/*">
     </div>
 
     <div class="control-group full-width">
-      <label>2. Name Text</label>
-      <input type="text" id="nameInput" placeholder="ENTER NAME" value="NAME">
+      <label id="lblName">2. ✍️ Your Name (మీ పేరు)</label>
+      <input type="text" id="nameInput" placeholder="..." value="NAME">
     </div>
 
     <div class="control-group">
-      <label>Language</label>
-      <select id="lang">
-        <option value="te">Telugu</option>
-        <option value="en">English</option>
-        <option value="hi">Hindi/Sanskrit</option>
-      </select>
-    </div>
-
-    <div class="control-group">
-      <label>Font Style</label>
+      <label id="lblFont">Style (స్టైల్)</label>
       <select id="fontSelect"></select>
     </div>
 
     <div class="control-group">
-        <label>Text Position</label>
+        <label id="lblPos">Position (స్థానం)</label>
         <select id="pos">
           <option value="bottom">Bottom Curve</option>
           <option value="top">Top Curve</option>
@@ -127,38 +126,30 @@
     </div>
 
     <div class="control-group">
-        <label>Font Weight</label>
-        <select id="fontWeight">
-          <option value="bold">Bold</option>
-          <option value="normal">Normal</option>
-        </select>
-    </div>
-
-    <div class="control-group">
-      <label>Text Color</label>
+      <label id="lblTxtColor">Text Color</label>
       <input type="color" id="textColor" value="#ffffff">
     </div>
 
     <div class="control-group">
-      <label>Border Color</label>
+      <label id="lblBorder">Border Color</label>
       <input type="color" id="borderColor" value="#0066ff">
     </div>
 
-    <div class="control-group">
-        <label>Border Width</label>
-        <input type="range" id="borderSize" min="0" max="40" value="12">
-    </div>
-
-    <div class="control-group">
-        <label>Font Size</label>
-        <input type="range" id="fSize" min="30" max="100" value="65">
-    </div>
+    <input type="hidden" id="fontWeight" value="bold">
+    <input type="hidden" id="borderSize" value="12">
+    <input type="hidden" id="fSize" value="65">
 
     <div class="btn-group full-width">
       <button class="btn-sec" onclick="location.reload()">Reset</button>
-      <button id="dlBtn" class="btn-main">Download Badge</button>
+      <button id="dlBtn" class="btn-main">✅ Download</button>
     </div>
   </div>
+
+  <footer>
+    <p style="margin: 2px 0;">© 2026 Sandeep Miriyala — Yuktishala AI</p>
+    <p style="margin: 2px 0;">🔒 Privacy First Priority</p>
+    <p id="currentDateTime" style="font-weight: bold; color: #444; margin: 5px 0;"></p>
+  </footer>
 </div>
 
 <button id="installFab" class="fab-install">📲</button>
@@ -171,25 +162,80 @@ const fontMap = {
   hi: ["Noto Sans Devanagari", "Tiro Devanagari Sanskrit", "Hind"]
 };
 
+const translations = {
+  te: {
+    guide: "<strong>🚀 సులభమైన స్టెప్స్:</strong><ol><li><b>ఫోటో ఎంచుకోండి</b> పై క్లిక్ చేయండి.</li><li>మీ ముఖం కనిపించేలా <b>Zoom</b> జరపండి.</li><li>మీ <b>పేరు</b> టైప్ చేయండి.</li><li><b>Download</b> బటన్ నొక్కండి.</li></ol>",
+    lblPhoto: "1. 📸 ఫోటో ఎంచుకోండి",
+    lblName: "2. ✍️ మీ పేరు టైప్ చేయండి",
+    lblZoom: "🔍 జూమ్ అడ్జస్ట్ చేయండి",
+    lblFont: "అక్షరాల స్టైల్",
+    lblPos: "పేరు ఎక్కడ ఉండాలి?",
+    lblTxtColor: "అక్షరాల రంగు",
+    lblBorder: "బార్డర్ రంగు"
+  },
+  hi: {
+    guide: "<strong>🚀 आसान स्टेप्स:</strong><ol><li><b>Pick Photo</b> पर क्लिक करें।</li><li>चेहरे को सेट करने के लिए <b>Zoom</b> करें।</li><li>अपना <b>नाम</b> लिखें।</li><li><b>Download</b> बटन दबाएं।</li></ol>",
+    lblPhoto: "1. 📸 फोटो चुनें",
+    lblName: "2. ✍️ अपना नाम लिखें",
+    lblZoom: "🔍 ज़ूम सेट करें",
+    lblFont: "लिखने का स्टाइल",
+    lblPos: "नाम कहाँ रखें?",
+    lblTxtColor: "नाम का रंग",
+    lblBorder: "बॉर्डर का रंग"
+  },
+  en: {
+    guide: "<strong>🚀 Easy Steps:</strong><ol><li>Click <b>Pick Photo</b> to upload.</li><li>Use <b>Zoom</b> to center your face.</li><li>Type your <b>Name</b>.</li><li>Click <b>Download Badge</b>.</li></ol>",
+    lblPhoto: "1. 📸 Pick Photo",
+    lblName: "2. ✍️ Your Name",
+    lblZoom: "🔍 Image Zoom",
+    lblFont: "Font Style",
+    lblPos: "Text Position",
+    lblTxtColor: "Text Color",
+    lblBorder: "Border Color"
+  }
+};
+
 const el = (id) => document.getElementById(id);
 const canvas = el('canvas'), ctx = canvas.getContext('2d');
 const pCanvas = el('pCanvas'), pctx = pCanvas.getContext('2d');
 
 let userImg = null;
 
+function updateFooter() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString('en-US', options);
+    el('currentDateTime').textContent = formattedDate;
+}
+
 function loadFonts() {
+  const selectedLang = el('lang').value;
   const sel = el('fontSelect');
   sel.innerHTML = "";
-  fontMap[el('lang').value].forEach(f => {
+  
+  fontMap[selectedLang].forEach(f => {
     const o = document.createElement("option");
     o.value = f; o.textContent = f;
     sel.appendChild(o);
   });
+
+  const langData = translations[selectedLang];
+  el('helpBox').innerHTML = langData.guide;
+  el('lblPhoto').textContent = langData.lblPhoto;
+  el('lblName').textContent = langData.lblName;
+  el('lblZoom').textContent = langData.lblZoom;
+  el('lblFont').textContent = langData.lblFont;
+  el('lblPos').textContent = langData.lblPos;
+  el('lblTxtColor').textContent = langData.lblTxtColor;
+  el('lblBorder').textContent = langData.lblBorder;
+
   draw();
 }
 
-window.onload = () => { loadFonts(); draw(); };
-el('lang').onchange = loadFonts;
+window.onload = () => { 
+  loadFonts(); 
+  updateFooter();
+};
 
 function toggleHelp() {
   const box = el('helpBox');
@@ -234,14 +280,12 @@ function draw() {
 
         c.clearRect(0,0,canv.s,canv.s);
 
-        // 1. Border
         const bSize = parseInt(el('borderSize').value) * scale * 2;
         c.fillStyle = el('borderColor').value;
         c.beginPath();
         c.arc(mid, mid, mid, 0, Math.PI*2);
         c.fill();
 
-        // 2. Image
         c.save();
         c.beginPath();
         c.arc(mid, mid, mid - bSize, 0, Math.PI*2);
@@ -260,10 +304,9 @@ function draw() {
         }
         c.restore();
 
-        // 3. Text
         c.fillStyle = el('textColor').value;
-        c.shadowColor = "rgba(0,0,0,0.7)";
-        c.shadowBlur = 10 * scale;
+        c.shadowColor = "rgba(0,0,0,0.8)";
+        c.shadowBlur = 12 * scale;
         c.textAlign = "center";
         c.textBaseline = "middle";
 
@@ -284,29 +327,16 @@ function draw() {
     });
 }
 
-['nameInput', 'textColor', 'borderColor', 'borderSize', 'pos', 'imgZoom', 'fontSelect', 'fontWeight', 'fSize'].forEach(id => {
+['nameInput', 'textColor', 'borderColor', 'pos', 'imgZoom', 'fontSelect'].forEach(id => {
     el(id).addEventListener('input', draw);
 });
 
 el('dlBtn').onclick = () => {
-    if(!userImg) return alert("Upload a photo first!");
+    if(!userImg) return alert("Please upload a photo first!");
     const link = document.createElement('a');
-    link.download = 'aksharanama_badge.png';
+    link.download = 'badge.png';
     link.href = canvas.toDataURL('image/png', 1.0);
     link.click();
-};
-
-let defPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); defPrompt = e; el('installFab').style.display = 'flex';
-});
-el('installFab').onclick = async () => {
-  if (defPrompt) {
-    defPrompt.prompt();
-    const { outcome } = await defPrompt.userChoice;
-    if (outcome === 'accepted') el('installFab').style.display = 'none';
-    defPrompt = null;
-  }
 };
 </script>
 </body>
