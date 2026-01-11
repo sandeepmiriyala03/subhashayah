@@ -1,151 +1,63 @@
-const CACHE_NAME = 'subhasayah-v1';
-const FONT_CACHE = 'subhasayah-fonts-v1';
-
-const APP_SHELL = [
+const CACHE_NAME = 'akshara-v2';
+const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './manifest.json'
+  // Add other local assets like images/css here
 ];
 
-const FONT_URLS = [
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Ramabhadra&display=swap',
-  'https://fonts.googleapis.com/css2?family=Gidugu&display=swap',
-  'https://fonts.googleapis.com/css2?family=Mandali&display=swap',
-  'https://fonts.googleapis.com/css2?family=NTR&display=swap',
-  'https://fonts.googleapis.com/css2?family=RaviPrakash&display=swap',
-  'https://fonts.googleapis.com/css2?family=Tenali+Ramakrishna&display=swap',
-  'https://fonts.googleapis.com/css2?family=Timmana&display=swap',
-  'https://fonts.googleapis.com/css2?family=Chathura:wght@100;300;400;700;800&display=swap',
-  'https://fonts.googleapis.com/css2?family=Ramaraja&display=swap',
-  'https://fonts.googleapis.com/css2?family=Ponnala&display=swap',
-  'https://fonts.googleapis.com/css2?family=Sree+Krushnadevaraya&display=swap',
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Lora:wght@700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&display=swap',
-  'https://fonts.googleapis.com/css2?family=Hind:wght@700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'
-];
-
-// Install event - cache app shell and fonts
-self.addEventListener('install', event => {
-  console.log('[SW] Installing Service Worker...');
-  
+// 1. Install Event
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing...');
   event.waitUntil(
-    Promise.all([
-      // Cache app shell
-      caches.open(CACHE_NAME).then(cache => {
-        console.log('[SW] Caching app shell');
-        return cache.addAll(APP_SHELL);
-      }),
-      // Cache fonts
-      caches.open(FONT_CACHE).then(cache => {
-        console.log('[SW] Caching fonts');
-        return Promise.all(
-          FONT_URLS.map(url => {
-            return fetch(url, { mode: 'cors' })
-              .then(response => {
-                if (response.ok) {
-                  return cache.put(url, response);
-                }
-              })
-              .catch(err => console.log('[SW] Font cache error:', err));
-          })
-        );
-      })
-    ]).then(() => {
-      console.log('[SW] Installation complete');
-      return self.skipWaiting();
-    })
-  );
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  console.log('[SW] Activating Service Worker...');
-  
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME && cacheName !== FONT_CACHE) {
-            console.log('[SW] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
+    caches.open(CACHE_NAME).then((cache) => {
+      // we use cache.add instead of addAll for individual files to prevent 
+      // the whole thing failing if one file is missing
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map(url => cache.add(url))
       );
-    }).then(() => {
-      console.log('[SW] Activation complete');
-      return self.clients.claim();
+    })
+  );
+  self.skipWaiting();
+});
+
+// 2. Activate Event
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating...');
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
     })
   );
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Handle Google Fonts requests
-  if (url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com') {
-    event.respondWith(
-      caches.match(request).then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(request, { mode: 'cors' }).then(fetchResponse => {
-          return caches.open(FONT_CACHE).then(cache => {
-            cache.put(request, fetchResponse.clone());
-            return fetchResponse;
-          });
-        }).catch(() => {
-          console.log('[SW] Font fetch failed, using fallback');
-        });
-      })
-    );
-    return;
-  }
-
-  // Handle app requests
+// 3. Fetch Event (The Fix for your Response error)
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(request).then(response => {
-      // Return cached version if available
-      if (response) {
-        return response;
-      }
-
-      // Otherwise fetch from network
-      return fetch(request).then(fetchResponse => {
-        // Don't cache non-successful responses
-        if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'error') {
-          return fetchResponse;
-        }
-
-        // Cache successful responses (except for images - user uploads)
-        if (!request.url.includes('blob:') && !request.url.includes('data:')) {
-          const responseToCache = fetchResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, responseToCache);
+    caches.match(event.request).then((cachedResponse) => {
+      // Return cached file OR fetch from network
+      return cachedResponse || fetch(event.request).then((networkResponse) => {
+        // Only cache valid successful responses
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
           });
         }
-
-        return fetchResponse;
-      }).catch(err => {
-        console.log('[SW] Fetch failed:', err);
-        
-        // Return offline fallback page if available
-        return caches.match('./index.html');
+        return networkResponse;
+      }).catch(() => {
+        // Fallback if both fail (e.g., offline and not in cache)
+        if (event.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+        // This MUST return a Response object, even if empty
+        return new Response('Offline content not available', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({ 'Content-Type': 'text/plain' })
+        });
       });
     })
   );
-});
-
-// Handle messages from clients
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });
